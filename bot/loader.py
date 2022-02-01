@@ -11,6 +11,6 @@ bot = Bot(token=BOT_TOKEN)
 storage = MemoryStorage()
 db = peewee.SqliteDatabase("data.sqlite")
 dp = Dispatcher(bot, storage=storage)
-tasks = load_tasks("tasks")
+tasks = load_tasks("./bot/tasks")
 stateInfoHolder = StateInfoHolder()
 

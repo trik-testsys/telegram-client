@@ -2,7 +2,7 @@ from time import sleep
 
 import aiohttp
 
-url = "url to grading server"
+url = "http://192.168.1.243:8080/grading-system/submissions/submission/"
 ERROR = "error"
 
 

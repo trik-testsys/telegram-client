@@ -23,6 +23,7 @@ class Messages:
 
 class Keyboards:
 
+
     async def create_CHOOSE_SUBMIT_KEYBOARD(self, message):
         CHOOSE_SUBMIT_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
         state_info = stateInfoHolder.get(message.from_user.id)
