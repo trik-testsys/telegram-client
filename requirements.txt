@@ -1,3 +1,4 @@
-aiogram
-prettytable
-peewee
+aiogram~=2.17.1
+prettytable~=2.5.0
+peewee~=3.14.8
+aiohttp~=3.8.1

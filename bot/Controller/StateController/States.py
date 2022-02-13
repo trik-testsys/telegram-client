@@ -1,7 +1,7 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
-class StateMachine(StatesGroup):
+class States(StatesGroup):
 
     wait_auth = State()
 
