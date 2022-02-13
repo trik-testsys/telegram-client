@@ -2,13 +2,17 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from bot.Controller.StateController.States import States
+from bot.Repository.TaskRepository import TaskRepository
 from bot.data.Submit import get_student_result
-from bot.loader import stateInfoHolder, tasks, dp
+from bot.loader import stateInfoHolder, dp
 from bot.utils.injector import ChangeState, StateController
 
 
 @StateController(States.student_menu, dp)
 class StudentMenuController:
+
+    taskRepository = TaskRepository
+
     UPDATE = "Обновить"
 
     CHOOSE_ACTION = "Выберите действие"
@@ -37,11 +41,10 @@ class StudentMenuController:
                 info = message.text.split()
                 if len(info) != 2:
                     return
-                if info[1] in tasks.keys():
+                if info[1] in cls.taskRepository.get_tasks():
                     stateInfoHolder.get(message.from_user.id).chosen_task = info[1]
 
                 await ChangeState(States.task_menu_student, message)
-
 
     @classmethod
     async def prepare(cls, message: types.Message):

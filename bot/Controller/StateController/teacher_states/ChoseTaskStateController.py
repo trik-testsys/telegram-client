@@ -2,15 +2,19 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ParseMode
 
 from bot.Controller.StateController.States import States
+from bot.Repository.TaskRepository import TaskRepository
 from bot.data.Submit import get_student_result
 
 
-from bot.loader import stateInfoHolder, tasks, dp
-from bot.utils.injector import StateController, ChangeState
+from bot.loader import stateInfoHolder,  dp
+from bot.utils.injector import StateController, ChangeState, Autowired
 
 
 @StateController(States.chose_task, dp)
 class ChoseTaskStateController:
+
+    taskRepository = TaskRepository
+
     RESULTS = "Результаты"
     CHOOSE_TASK = "Задачи ученика"
     BACK = "Назад"
@@ -39,7 +43,7 @@ class ChoseTaskStateController:
             return
 
         task_name = text[1]
-        if task_name not in tasks:
+        if task_name not in cls.taskRepository.get_tasks():
             return
 
         stateInfoHolder.get(message.from_user.id).chosen_task = task_name

@@ -2,15 +2,19 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ParseMode
 
 from bot.Controller.StateController.States import States
+from bot.Repository.TaskRepository import TaskRepository
 from bot.data.Submit import get_student_submits_view
-from bot.loader import stateInfoHolder, tasks, dp
+from bot.loader import stateInfoHolder,  dp
 import aiogram.utils.markdown as md
 
-from bot.utils.injector import StateController, ChangeState
+from bot.utils.injector import StateController, ChangeState, Autowired
 
 
 @StateController(States.task_menu_student, dp)
 class TaskMenuStateController:
+
+    taskRepository = TaskRepository
+
     STATEMENT = "Условие"
     SUBMIT_RESULTS = "Послыки"
     SUBMIT = "Отправить"
@@ -31,6 +35,7 @@ class TaskMenuStateController:
 
             case cls.STATEMENT:
                 task_name = stateInfoHolder.get(message.from_user.id).chosen_task
+                tasks = cls.taskRepository.get_tasks()
                 for task in tasks.keys():
                     if task == task_name:
                         await message.answer(text=tasks[task])

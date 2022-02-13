@@ -1,8 +1,10 @@
 import peewee as pw
 from prettytable import PrettyTable
 
+from bot.Repository.TaskRepository import TaskRepository
 from bot.config import STUDENTS
-from bot.loader import db, tasks
+from bot.loader import db
+from bot.utils.injector import Autowired
 
 
 class Submit(pw.Model):
@@ -40,10 +42,10 @@ async def get_student_submits_by_task(student_id: str, task_name: str) -> list[S
 async def get_student_result(student_id: str) -> dict[str, str]:
     results = {}
 
-    for task in tasks.keys():
+    for task in TaskRepository.get_tasks():
         results[task] = "undef"
 
-    for task in tasks.keys():
+    for task in TaskRepository.get_tasks():
         student_result = await get_student_submits_by_task(student_id, task)
         status = ""
         cnt = str(len(student_result))
@@ -86,7 +88,7 @@ async def get_all_results_view():
     table = PrettyTable()
     title = ['Ученик']
 
-    for task_name in tasks.keys():
+    for task_name in TaskRepository.get_tasks().keys():
         title.append(task_name)
 
     table.field_names = title
