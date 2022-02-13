@@ -5,13 +5,14 @@ import Controller
 
 from aiogram.utils import executor
 from bot.data.Submit import init_database
-from bot.grading import GradingClient
+from bot.grading.GradingClient import update_all_submits_status
 
 
 def main():
     logging.basicConfig(level=logging.DEBUG)
     init_database()
-    asyncio.gather(GradingClient.start_polling())
+    loader.scheduler.add_job(update_all_submits_status, "interval", seconds=5)
+    loader.scheduler.start()
     executor.start_polling(loader.dp, skip_updates=True)
 
 
