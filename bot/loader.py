@@ -11,7 +11,10 @@ from config import BOT_TOKEN
 bot = Singleton(Bot(token=BOT_TOKEN))
 storage = Singleton(MemoryStorage())
 scheduler = Singleton(AsyncIOScheduler())
-db = Singleton(peewee.SqliteDatabase("data.sqlite"))
+db = Singleton(peewee.SqliteDatabase("data.sqlite", pragmas={
+    'journal_mode': 'wal',
+    'synchronous': 'normal'
+}))
 dp = Singleton(Dispatcher(bot, storage=storage))
 stateInfoHolder = Singleton(StateInfoHolder())
 

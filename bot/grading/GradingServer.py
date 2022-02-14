@@ -1,3 +1,4 @@
+import asyncio.exceptions
 from time import sleep
 
 import aiohttp
@@ -24,7 +25,7 @@ async def get_submission(submit_id: str):
     async with aiohttp.ClientSession() as session:
 
         async with session.get(f"{url}download", params={'id': submit_id}) as resp:
-            print(resp.status)
+
             match resp.status:
 
                 case 200:
@@ -37,16 +38,21 @@ async def get_submission(submit_id: str):
 async def send_task(task_name: str, file) -> str:
     params = {'task_name': task_name, 'file': file}
     timeout = aiohttp.ClientTimeout(total=5)
-    async with aiohttp.ClientSession(timeout=timeout) as session:
 
-        async with session.post(f"{url}upload", data=params) as resp:
+    try:
+        async with aiohttp.ClientSession(timeout=timeout) as session:
 
-            match resp.status:
+            async with session.post(f"{url}upload", data=params) as resp:
 
-                case 200:
-                    return await resp.text()
+                match resp.status:
 
-                case _:
-                    return ERROR
+                    case 200:
+                        return await resp.text()
+
+                    case _:
+                        return ERROR
+
+    except asyncio.exceptions.TimeoutError:
+        return ERROR
 
 
