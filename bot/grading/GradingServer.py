@@ -36,11 +36,10 @@ async def get_submission(submit_id: str):
 
 async def send_task(task_name: str, file) -> str:
     params = {'task_name': task_name, 'file': file}
-    async with aiohttp.ClientSession() as session:
+    timeout = aiohttp.ClientTimeout(total=5)
+    async with aiohttp.ClientSession(timeout=timeout) as session:
 
         async with session.post(f"{url}upload", data=params) as resp:
-            print(resp.status)
-            print(await resp.text())
 
             match resp.status:
 
@@ -51,7 +50,3 @@ async def send_task(task_name: str, file) -> str:
                     return ERROR
 
 
-async def test_grading():
-    # kek = await send_task("task1", "2.1.3 (3).qrs")
-    # sleep(60)
-    print(await get_submissions_status("1000000"))

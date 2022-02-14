@@ -9,6 +9,7 @@ from bot.utils.injector import StateController, ChangeState
 
 @StateController(States.wait_auth, dp)
 class WaitAuthStateController:
+
     SUCCESS_AUTH_TEACHER = "Вы успешно авторизованы как преподаватель!"
     SUCCESS_AUTH_STUDENT = "Вы успешно авторизованы как ученик!"
     INCORRECT_CODE = "Ваш код некорректен, попробуйте еще раз"

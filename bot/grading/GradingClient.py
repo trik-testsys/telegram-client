@@ -2,6 +2,7 @@ import asyncio
 
 from bot.data.Submit import get_all_results, create_submit
 from bot.grading import GradingServer
+from bot.grading.GradingServer import ERROR
 
 
 async def update_all_submits_status():
@@ -10,19 +11,18 @@ async def update_all_submits_status():
     for submit in submits:
 
         if submit.result == "?":
-            submit.result = await GradingServer.get_submissions_status(submit.submit_id)
+            result = await GradingServer.get_submissions_status(submit.submit_id)
+            submit.result = result if result != ERROR else submit.result
             submit.save()
 
 
-async def start_polling():
-    await update_all_submits_status()
-    await asyncio.sleep(30)
-    await start_polling()
-
-
 async def send_task(task_name: str, student_id: str, file) -> str:
+    print("kek")
     submit_id = await GradingServer.send_task(task_name, file)
-    await create_submit(submit_id, student_id, task_name)
+
+    if submit_id != ERROR:
+        await create_submit(submit_id, student_id, task_name)
+
     return submit_id
 
 

@@ -6,6 +6,7 @@ from bot.Controller.StateController.teacher_states import ChoseTaskStateControll
 from bot.data.Submit import get_student_submits_by_task
 
 from bot.grading.GradingClient import get_submit
+from bot.grading.GradingServer import ERROR
 from bot.loader import stateInfoHolder, bot, dp
 from bot.utils.injector import StateController, ChangeState
 
@@ -18,6 +19,7 @@ class ChoseSubmitStateController:
     BACK = "Назад"
 
     SUBMIT = "Посылка ученика"
+    SUBMIT_NOT_FOUND = "Не удалось получить посылку так как сервер недоступен. Попробуйте позже."
 
     @classmethod
     async def create_CHOOSE_SUBMIT_KEYBOARD(cls, message):
@@ -45,7 +47,10 @@ class ChoseSubmitStateController:
         submit_id = text[1]
         await message.answer(cls.SUBMIT)
         file = await get_submit(submit_id)
-        await bot.send_document(message.from_user.id, (f'submit_{submit_id}.qrs', file))
+        if file != ERROR:
+            await bot.send_document(message.from_user.id, (f'submit_{submit_id}.qrs', file))
+        else:
+            await message.answer(cls.SUBMIT_NOT_FOUND)
 
     @classmethod
     async def prepare(cls, message: types.Message):

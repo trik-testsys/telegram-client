@@ -9,6 +9,7 @@ from bot.utils.injector import StateController, ChangeState
 
 @StateController(States.chose_student, dp)
 class ChoseStudentStateController:
+
     RESULTS = "Результаты"
     CHOOSE_STUDENT = "Ученики"
     BACK = "Назад"

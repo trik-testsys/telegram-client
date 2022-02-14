@@ -2,6 +2,7 @@ from typing import Dict, List
 
 from aiogram import Dispatcher, types
 from aiogram.dispatcher.filters.state import State
+from aiogram.types import ContentType
 
 _cls_instances: Dict[str, any] = {}
 _obj_instances: Dict[str, any] = {}
@@ -34,7 +35,7 @@ def StateController(state: State, dp: Dispatcher):
         hasPrepare = "prepare" in cls.__dict__
 
         if hasPrepare and hasHandler:
-            dp.register_message_handler(cls.handler, state=state)
+            dp.register_message_handler(cls.handler, state=state, content_types=ContentType.ANY)
             _preparations[state] = cls.prepare
         else:
             raise Exception("StateController must has prepare and handler method")
@@ -43,6 +44,7 @@ def StateController(state: State, dp: Dispatcher):
 
 
 def CommandController(commands: List[str], dp: Dispatcher):
+
     def decorator(cls: type):
 
         hasHandler = "handler" in cls.__dict__
