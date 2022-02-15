@@ -2,9 +2,9 @@ from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 from bot.controller.StateController.States import States
-from bot.config import STUDENTS
 from bot.loader import dp
 from bot.repository.StateInfoRepository import StateInfoRepository
+from bot.repository.UserRepository import UserRepository
 from utils.injector import StateController, ChangeState
 
 
@@ -12,13 +12,14 @@ from utils.injector import StateController, ChangeState
 class ChoseStudentStateController:
 
     stateInfoRepository = StateInfoRepository
+    userRepository = UserRepository
 
     RESULTS = "Результаты"
     CHOOSE_STUDENT = "Ученики"
     BACK = "Назад"
 
     CHOOSE_STUDENT_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-    for student in STUDENTS:
+    for student in userRepository.get_all_students():
         CHOOSE_STUDENT_KEYBOARD.add(KeyboardButton(student))
     CHOOSE_STUDENT_KEYBOARD.add(KeyboardButton(BACK))
 
@@ -28,7 +29,7 @@ class ChoseStudentStateController:
         if message.text == cls.BACK:
             await ChangeState(States.teacher_menu, message)
 
-        if message.text in STUDENTS:
+        if await cls.userRepository.is_student(message.text):
             cls.stateInfoRepository.get(message.from_user.id).chosen_student = message.text
             await ChangeState(States.chose_task, message)
 

@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 
-from bot.config import STUDENTS
 from bot.repository.TaskRepository import TaskRepository
+from bot.repository.UserRepository import UserRepository
 from model.Submit import Submit
 from utils.injector import Repository
 
@@ -10,6 +10,7 @@ from utils.injector import Repository
 class SubmitRepository:
 
     taskRepository = TaskRepository
+    userRepository = UserRepository
 
     @classmethod
     def init_repository(cls):
@@ -88,7 +89,7 @@ class SubmitRepository:
 
         table.field_names = title
 
-        for student in STUDENTS:
+        for student in cls.userRepository.get_all_students():
             student_result = await cls.get_student_result(student)
 
             results = [student]
