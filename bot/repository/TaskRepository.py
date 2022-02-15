@@ -1,13 +1,15 @@
 import os
 
-from bot.utils.injector import Repository
+from utils.injector import Repository
 
 
 @Repository
 class TaskRepository:
 
     @classmethod
-    def init_repository(cls, tasks_path= "./bot/tasks"):
+    def init_repository(cls, tasks_path="../tasks"):
+
+        print(os.path.abspath(os.path.curdir))
         tasks = {}
 
         for taskName in os.listdir(tasks_path):

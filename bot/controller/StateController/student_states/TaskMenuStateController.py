@@ -1,19 +1,22 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ParseMode
 
-from bot.Controller.StateController.States import States
-from bot.Repository.TaskRepository import TaskRepository
-from bot.data.Submit import get_student_submits_view
-from bot.loader import stateInfoHolder,  dp
+from bot.controller.StateController.States import States
+from bot.repository.StateInfoRepository import StateInfoRepository
+from bot.repository.SubmitRepository import SubmitRepository
+from bot.repository.TaskRepository import TaskRepository
+from bot.loader import dp
 import aiogram.utils.markdown as md
 
-from bot.utils.injector import StateController, ChangeState, Autowired
+from utils.injector import StateController, ChangeState
 
 
 @StateController(States.task_menu_student, dp)
 class TaskMenuStateController:
 
     taskRepository = TaskRepository
+    submitRepository = SubmitRepository
+    stateInfoRepository = StateInfoRepository
 
     STATEMENT = "Условие"
     SUBMIT_RESULTS = "Послыки"
@@ -34,15 +37,15 @@ class TaskMenuStateController:
         match message.text:
 
             case cls.STATEMENT:
-                task_name = stateInfoHolder.get(message.from_user.id).chosen_task
+                task_name = cls.stateInfoRepository.get(message.from_user.id).chosen_task
                 tasks = cls.taskRepository.get_tasks()
                 for task in tasks.keys():
                     if task == task_name:
                         await message.answer(text=tasks[task])
 
             case cls.SUBMIT_RESULTS:
-                state_info = stateInfoHolder.get(message.from_user.id)
-                results = await get_student_submits_view(state_info.user_id, state_info.chosen_task)
+                state_info = cls.stateInfoRepository.get(message.from_user.id)
+                results = await cls.submitRepository.get_student_submits_view(state_info.user_id, state_info.chosen_task)
                 await message.answer(md.code(results), parse_mode=ParseMode.MARKDOWN_V2,
                                      reply_markup=cls.TASK_MENU_KEYBOARD)
 

@@ -1,19 +1,22 @@
 from aiogram import types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ParseMode
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-from bot.Controller.StateController.States import States
-from bot.Repository.TaskRepository import TaskRepository
-from bot.data.Submit import get_student_result
+from bot.controller.StateController.States import States
+from bot.repository.StateInfoRepository import StateInfoRepository
+from bot.repository.SubmitRepository import SubmitRepository
+from bot.repository.TaskRepository import TaskRepository
 
 
-from bot.loader import stateInfoHolder,  dp
-from bot.utils.injector import StateController, ChangeState, Autowired
+from bot.loader import dp
+from utils.injector import StateController, ChangeState
 
 
 @StateController(States.chose_task, dp)
 class ChoseTaskStateController:
 
     taskRepository = TaskRepository
+    submitRepository = SubmitRepository
+    stateInfoRepository = StateInfoRepository
 
     RESULTS = "Результаты"
     CHOOSE_TASK = "Задачи ученика"
@@ -23,7 +26,7 @@ class ChoseTaskStateController:
     async def create_CHOOSE_TASK_KEYBOARD(cls, message):
 
         CHOOSE_TASK_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-        student_result = await get_student_result(stateInfoHolder.get(message.from_user.id).chosen_student)
+        student_result = await cls.submitRepository.get_student_result(cls.stateInfoRepository.get(message.from_user.id).chosen_student)
         for task_name in student_result.keys():
             CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"{student_result[task_name]} {task_name}"))
 
@@ -46,7 +49,7 @@ class ChoseTaskStateController:
         if task_name not in cls.taskRepository.get_tasks():
             return
 
-        stateInfoHolder.get(message.from_user.id).chosen_task = task_name
+        cls.stateInfoRepository.get(message.from_user.id).chosen_task = task_name
         await ChangeState(States.chose_submit, message)
 
     @classmethod

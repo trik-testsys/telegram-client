@@ -1,26 +1,28 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-from bot.Controller.StateController.States import States
-from bot.Repository.TaskRepository import TaskRepository
-from bot.data.Submit import get_student_result
-from bot.loader import stateInfoHolder, dp
-from bot.utils.injector import ChangeState, StateController
+from bot.controller.StateController.States import States
+from bot.repository.StateInfoRepository import StateInfoRepository
+from bot.repository.SubmitRepository import SubmitRepository
+from bot.repository.TaskRepository import TaskRepository
+from bot.loader import dp
+from utils.injector import ChangeState, StateController
 
 
 @StateController(States.student_menu, dp)
 class StudentMenuController:
 
     taskRepository = TaskRepository
+    submitRepository = SubmitRepository
+    stateInfoRepository = StateInfoRepository
 
     UPDATE = "Обновить"
-
     CHOOSE_ACTION = "Выберите действие"
 
     @classmethod
     async def create_CHOOSE_TASK_KEYBOARD(cls, student):
         CHOOSE_TASK_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-        results = await get_student_result(student)
+        results = await cls.submitRepository.get_student_result(student)
 
         for task_name in results.keys():
             result = results[task_name]
@@ -42,11 +44,11 @@ class StudentMenuController:
                 if len(info) != 2:
                     return
                 if info[1] in cls.taskRepository.get_tasks():
-                    stateInfoHolder.get(message.from_user.id).chosen_task = info[1]
+                    cls.stateInfoRepository.get(message.from_user.id).chosen_task = info[1]
 
                 await ChangeState(States.task_menu_student, message)
 
     @classmethod
     async def prepare(cls, message: types.Message):
-        keyboard = await cls.create_CHOOSE_TASK_KEYBOARD(stateInfoHolder.get(message.from_user.id).user_id)
+        keyboard = await cls.create_CHOOSE_TASK_KEYBOARD(cls.stateInfoRepository.get(message.from_user.id).user_id)
         await message.reply("Выберите действие:", reply_markup=keyboard)

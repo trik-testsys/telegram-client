@@ -1,8 +1,8 @@
 from aiogram import types
 
-from bot.Controller.StateController.States import States
+from bot.controller.StateController.States import States
 from bot.loader import dp
-from bot.utils.injector import CommandController, ChangeState
+from utils.injector import CommandController, ChangeState
 
 
 @CommandController(["start", "restart"], dp)

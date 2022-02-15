@@ -1,14 +1,17 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-from bot.Controller.StateController.States import States
+from bot.controller.StateController.States import States
 from bot.config import STUDENTS
-from bot.loader import stateInfoHolder, dp
-from bot.utils.injector import StateController, ChangeState
+from bot.loader import dp
+from bot.repository.StateInfoRepository import StateInfoRepository
+from utils.injector import StateController, ChangeState
 
 
 @StateController(States.chose_student, dp)
 class ChoseStudentStateController:
+
+    stateInfoRepository = StateInfoRepository
 
     RESULTS = "Результаты"
     CHOOSE_STUDENT = "Ученики"
@@ -26,7 +29,7 @@ class ChoseStudentStateController:
             await ChangeState(States.teacher_menu, message)
 
         if message.text in STUDENTS:
-            stateInfoHolder.get(message.from_user.id).chosen_student = message.text
+            cls.stateInfoRepository.get(message.from_user.id).chosen_student = message.text
             await ChangeState(States.chose_task, message)
 
     @classmethod
