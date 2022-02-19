@@ -14,7 +14,6 @@ from utils.injector import StateController, ChangeState
 class SubmitStateController:
 
     stateInfoRepository = StateInfoRepository
-
     gradingService = GradingService
 
     BACK = "Назад"

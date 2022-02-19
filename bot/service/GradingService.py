@@ -63,7 +63,13 @@ class GradingService:
                         return cls.ERROR
 
     @classmethod
-    async def send_task(cls, task_name: str, file) -> str:
+    async def send_task(cls, task_name: str, student_id: str, file) -> str:
+        submit_id = await cls._send_task(task_name, file)
+        await SubmitRepository.create_submit(submit_id, student_id, task_name)
+        return submit_id
+
+    @classmethod
+    async def _send_task(cls, task_name: str, file) -> str:
         params = {'task_name': task_name, 'file': file}
         timeout = aiohttp.ClientTimeout(total=5)
 

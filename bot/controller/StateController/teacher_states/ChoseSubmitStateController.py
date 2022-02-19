@@ -38,7 +38,7 @@ class ChoseSubmitStateController:
     async def handler(cls, message: types.Message):
 
         if message.text == cls.BACK:
-            await ChangeState(States.chose_submit, message)
+            await ChangeState(States.chose_task, message)
             return
 
         text = message.text.split()

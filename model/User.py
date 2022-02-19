@@ -6,7 +6,7 @@ class User(pw.Model):
     role = pw.CharField()
 
     class Meta:
-        database = pw.SqliteDatabase("../user.sqlite", pragmas={
+        database = pw.SqliteDatabase("user.sqlite", pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })

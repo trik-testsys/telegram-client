@@ -7,7 +7,7 @@ from utils.injector import Repository
 class TaskRepository:
 
     @classmethod
-    def init_repository(cls, tasks_path="../tasks"):
+    def init_repository(cls, tasks_path="tasks"):
 
         print(os.path.abspath(os.path.curdir))
         tasks = {}

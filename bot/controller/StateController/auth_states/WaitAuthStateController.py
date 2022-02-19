@@ -19,7 +19,7 @@ class WaitAuthStateController:
 
     @classmethod
     async def handler(cls, message: types.Message):
-
+        print(message.text)
         if await cls.userRepository.is_student(message.text):
             await message.reply(cls.SUCCESS_AUTH_STUDENT)
             cls.stateInfoRepository.create(message.from_user.id, message.text)

@@ -1,3 +1,5 @@
+import os
+
 import peewee as pw
 
 
@@ -8,7 +10,8 @@ class Submit(pw.Model):
     result = pw.CharField()
 
     class Meta:
-        database = pw.SqliteDatabase("../submit.sqlite", pragmas={
+
+        database = pw.SqliteDatabase("submit.sqlite", pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })

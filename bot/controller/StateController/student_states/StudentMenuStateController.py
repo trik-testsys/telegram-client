@@ -1,17 +1,16 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from utils.injector import ChangeState, StateController
 
 from bot.controller.StateController.States import States
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.repository.TaskRepository import TaskRepository
 from bot.loader import dp
-from utils.injector import ChangeState, StateController
 
 
 @StateController(States.student_menu, dp)
 class StudentMenuController:
-
     taskRepository = TaskRepository
     submitRepository = SubmitRepository
     stateInfoRepository = StateInfoRepository
