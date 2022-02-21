@@ -36,5 +36,10 @@ class UserRepository:
         user = User.get(User.user_id == user_id)
         return user.role == "student"
 
-
-
+    @classmethod
+    async def get_user(cls, user_id):
+        users = User.select().where(User.user_id == user_id)
+        if len(users) == 0:
+            return None
+        else:
+            return users[0]

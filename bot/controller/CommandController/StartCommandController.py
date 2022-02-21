@@ -5,7 +5,7 @@ from bot.loader import dp
 from utils.injector import CommandController, ChangeState
 
 
-@CommandController(["start", "restart"], dp)
+@CommandController(["start"], dp)
 class StartCommandController:
 
     ASK_CODE = "Отправьте, пожалуйста, свой код!"

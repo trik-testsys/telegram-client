@@ -7,9 +7,9 @@ from utils.injector import Repository
 class TaskRepository:
 
     @classmethod
-    def init_repository(cls, tasks_path="tasks"):
-
-        print(os.path.abspath(os.path.curdir))
+    def init_repository(cls, tasks_path="C:\\Users\\mi\\Desktop\\trik-testsys-client\\tasks"):
+        print(tasks_path)
+        print(os.path.abspath("tasks"))
         tasks = {}
 
         for taskName in os.listdir(tasks_path):

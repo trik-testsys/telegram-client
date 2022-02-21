@@ -29,6 +29,7 @@ async def ChangeState(state: State, message: types.Message):
 
 
 def StateController(state: State, dp: Dispatcher):
+    print(state)
     def decorator(cls: type):
 
         hasHandler = "handler" in cls.__dict__
@@ -44,13 +45,13 @@ def StateController(state: State, dp: Dispatcher):
 
 
 def CommandController(commands: List[str], dp: Dispatcher):
-
+    print(commands)
     def decorator(cls: type):
 
         hasHandler = "handler" in cls.__dict__
 
         if hasHandler:
-            dp.register_message_handler(cls.handler, commands=commands, state="*")
+            dp.register_message_handler(cls.handler, commands=commands, state='*')
 
         else:
             raise Exception("CommandController must has handler method")

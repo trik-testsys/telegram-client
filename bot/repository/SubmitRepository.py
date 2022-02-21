@@ -54,7 +54,7 @@ class SubmitRepository:
 
                 match submit.result:
                     case "+":
-                        if status in ["", "-"]:
+                        if status in ["", "-", "?"]:
                             status = "+"
 
                     case "-":
@@ -62,7 +62,8 @@ class SubmitRepository:
                             status = "-"
 
                     case "?":
-                        status = "?"
+                        if status in ["", "-"]:
+                            status = "?"
 
             results[task] = status + cnt
 
