@@ -16,7 +16,7 @@ class StudentMenuController:
     stateInfoRepository = StateInfoRepository
 
     UPDATE = "Обновить"
-    CHOOSE_ACTION = "Выберите действие"
+    CHOOSE_ACTION = "Выберите задачу"
 
     @classmethod
     async def create_CHOOSE_TASK_KEYBOARD(cls, student):

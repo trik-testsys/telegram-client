@@ -17,6 +17,7 @@ class GradingService:
 
             if submit.result == "?":
                 result = await cls.get_submissions_status(submit.submit_id)
+                print(f"Result {submit.submit_id}: {result}")
                 submit.result = result if result != cls.ERROR else submit.result
                 submit.save()
 
