@@ -11,7 +11,7 @@ class Submit(pw.Model):
 
     class Meta:
 
-        database = pw.SqliteDatabase("C:\\Users\\mi\\Desktop\\trik-testsys-client\\submit.sqlite", pragmas={
+        database = pw.SqliteDatabase('/data/submit.sqlite', pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })
