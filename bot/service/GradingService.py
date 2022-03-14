@@ -1,12 +1,12 @@
 import asyncio
-
+import logging
 import aiohttp
 
 from bot.repository.SubmitRepository import SubmitRepository
 
 
 class GradingService:
-    url = "http://192.168.1.243:8080/grading-system/submissions/submission/"
+    url = "http://testsys:8080/grading-system/submissions/submission/"
     ERROR = "error"
 
     @classmethod
@@ -24,7 +24,7 @@ class GradingService:
     @classmethod
     async def send_task(cls, task_name: str, student_id: str, file) -> str:
 
-        submit_id = await cls.send_task(task_name, file)
+        submit_id = await cls._send_task(task_name, file)
 
         if submit_id != cls.ERROR:
             await SubmitRepository.create_submit(submit_id, student_id, task_name)
@@ -64,12 +64,6 @@ class GradingService:
                         return cls.ERROR
 
     @classmethod
-    async def send_task(cls, task_name: str, student_id: str, file) -> str:
-        submit_id = await cls._send_task(task_name, file)
-        await SubmitRepository.create_submit(submit_id, student_id, task_name)
-        return submit_id
-
-    @classmethod
     async def _send_task(cls, task_name: str, file) -> str:
         params = {'task_name': task_name, 'file': file}
         timeout = aiohttp.ClientTimeout(total=5)
@@ -78,7 +72,7 @@ class GradingService:
             async with aiohttp.ClientSession(timeout=timeout) as session:
 
                 async with session.post(f"{cls.url}upload", data=params) as resp:
-
+                    logging.info(f"STATUS = {resp.status}")
                     match resp.status:
 
                         case 200:
@@ -88,4 +82,5 @@ class GradingService:
                             return cls.ERROR
 
         except asyncio.exceptions.TimeoutError:
+            logging.info("AAAAAAAAAAAAAAAAAAAAAAA")
             return cls.ERROR

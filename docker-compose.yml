@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: network
+
+services:
+
+  pingbot:
+    container_name: pingbot
+    image: karasss/trik-testsys-telegram-client:0.01
+    restart: always

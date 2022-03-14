@@ -7,5 +7,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+EXPOSE 6000
 ENV PYTHONPATH="$PYTHONPATH:/bot"
 CMD [ "python3","bot/main.py3" ]
