@@ -8,7 +8,7 @@ from utils.injector import CommandController, ChangeState
 @CommandController(["start"], dp)
 class StartCommandController:
 
-    ASK_CODE = "Отправьте, пожалуйста, свой код!"
+    ASK_CODE = "Введите свой логин"
 
     @classmethod
     async def handler(cls, message: types.Message):

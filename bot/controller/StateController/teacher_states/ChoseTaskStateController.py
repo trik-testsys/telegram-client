@@ -28,7 +28,7 @@ class ChoseTaskStateController:
         CHOOSE_TASK_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
         student_result = await cls.submitRepository.get_student_result(cls.stateInfoRepository.get(message.from_user.id).chosen_student)
         for task_name in student_result.keys():
-            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"{student_result[task_name]} {task_name}"))
+            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"Задача: {task_name} Результат: {student_result[task_name]}"))
 
         CHOOSE_TASK_KEYBOARD.add(KeyboardButton(cls.BACK))
         return CHOOSE_TASK_KEYBOARD
@@ -42,7 +42,7 @@ class ChoseTaskStateController:
 
         text = message.text.split()
 
-        if len(text) != 2:
+        if len(text) < 2:
             return
 
         task_name = text[1]

@@ -15,7 +15,7 @@ class WaitAuthStateController:
 
     SUCCESS_AUTH_TEACHER = "Вы успешно авторизованы как преподаватель!"
     SUCCESS_AUTH_STUDENT = "Вы успешно авторизованы как ученик!"
-    INCORRECT_CODE = "Ваш код некорректен, попробуйте еще раз"
+    INCORRECT_CODE = "Пользователя с таким логином не существует, попробуйте еще раз"
 
     @classmethod
     async def handler(cls, message: types.Message):
@@ -24,16 +24,16 @@ class WaitAuthStateController:
         user = await cls.userRepository.get_user(message.text)
 
         if user is None:
-            await message.reply(cls.INCORRECT_CODE)
+            await message.answer(cls.INCORRECT_CODE)
             return
 
         if user.role == "student":
-            await message.reply(cls.SUCCESS_AUTH_STUDENT)
+            await message.answer(cls.SUCCESS_AUTH_STUDENT)
             cls.stateInfoRepository.create(message.from_user.id, message.text)
             await ChangeState(States.student_menu, message)
 
         if user.role == "teacher":
-            await message.reply(cls.SUCCESS_AUTH_TEACHER)
+            await message.answer(cls.SUCCESS_AUTH_TEACHER)
             cls.stateInfoRepository.create(message.from_user.id, message.text)
             await ChangeState(States.teacher_menu, message)
 

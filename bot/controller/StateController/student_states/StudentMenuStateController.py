@@ -1,3 +1,5 @@
+import logging
+
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from utils.injector import ChangeState, StateController
@@ -15,8 +17,9 @@ class StudentMenuController:
     submitRepository = SubmitRepository
     stateInfoRepository = StateInfoRepository
 
-    UPDATE = "Обновить"
+    UPDATE = "Обновить результаты"
     CHOOSE_ACTION = "Выберите задачу"
+    FEEDBACK = "Поддержка"
 
     @classmethod
     async def create_CHOOSE_TASK_KEYBOARD(cls, student):
@@ -25,7 +28,7 @@ class StudentMenuController:
 
         for task_name in results.keys():
             result = results[task_name]
-            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"{result} {task_name}"))
+            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"Задача: {task_name} | {cls.new_result_view(result)} "))
 
         CHOOSE_TASK_KEYBOARD.add(KeyboardButton(cls.UPDATE))
 
@@ -40,7 +43,7 @@ class StudentMenuController:
 
             case _:
                 info = message.text.split()
-                if len(info) != 2:
+                if len(info) < 2:
                     return
                 if info[1] in cls.taskRepository.get_tasks():
                     cls.stateInfoRepository.get(message.from_user.id).chosen_task = info[1]
@@ -50,4 +53,18 @@ class StudentMenuController:
     @classmethod
     async def prepare(cls, message: types.Message):
         keyboard = await cls.create_CHOOSE_TASK_KEYBOARD(cls.stateInfoRepository.get(message.from_user.id).user_id)
-        await message.reply("Выберите действие:", reply_markup=keyboard)
+        await message.answer(cls.CHOOSE_ACTION, reply_markup=keyboard)
+
+    @classmethod
+    def new_result_view(cls, res: str) -> str:
+
+        match res[0]:
+
+            case '+':
+                return res.replace("+", "Результат: ✅ | Посылок: ")
+            case '-':
+                return res.replace("-", "Результат: ❌ | Посылок: ")
+            case '?':
+                return res.replace("?", "Результат: ❔ | Посылок: ")
+            case '0':
+                return res.replace("0", "Результат: ❔ | Посылок: 0")

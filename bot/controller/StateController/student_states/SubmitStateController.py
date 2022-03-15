@@ -42,9 +42,10 @@ class SubmitStateController:
 
         if submit_id != cls.gradingService.ERROR:
             await message.answer(f"{cls.SENT}, ID посылки: {submit_id}")
+            await ChangeState(States.task_menu_student, message)
         else:
             await message.answer(f"{cls.NOT_SENT}")
 
     @classmethod
     async def prepare(cls, message: types.Message):
-        await message.reply(cls.SEND_FILE, reply_markup=cls.BACK_KEYBOARD)
+        await message.answer(cls.SEND_FILE, reply_markup=cls.BACK_KEYBOARD)

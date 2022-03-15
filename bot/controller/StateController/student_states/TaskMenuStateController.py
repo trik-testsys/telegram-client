@@ -19,16 +19,16 @@ class TaskMenuStateController:
     stateInfoRepository = StateInfoRepository
 
     STATEMENT = "Условие"
-    SUBMIT_RESULTS = "Послыки"
+    SUBMIT_RESULTS = "Посылки"
     SUBMIT = "Отправить"
     BACK = "Назад"
 
     CHOOSE_ACTION = "Выберите действие"
 
     TASK_MENU_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-    TASK_MENU_KEYBOARD.add(KeyboardButton(STATEMENT))
-    TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT_RESULTS))
     TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT))
+    TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT_RESULTS))
+    TASK_MENU_KEYBOARD.add(KeyboardButton(STATEMENT))
     TASK_MENU_KEYBOARD.add(KeyboardButton(BACK))
 
     @classmethod
@@ -57,4 +57,4 @@ class TaskMenuStateController:
 
     @classmethod
     async def prepare(cls, message: types.Message):
-        await message.reply(cls.CHOOSE_ACTION, reply_markup=cls.TASK_MENU_KEYBOARD)
+        await message.answer(cls.CHOOSE_ACTION, reply_markup=cls.TASK_MENU_KEYBOARD)

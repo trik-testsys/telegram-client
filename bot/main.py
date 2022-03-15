@@ -15,7 +15,7 @@ def fix_handlers_order():
 
 
 def main():
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG, filename="/logs/bot.txt")
     loader.scheduler.add_job(GradingService.update_all_submits_status, "interval", seconds=30)
     loader.scheduler.start()
     fix_handlers_order()

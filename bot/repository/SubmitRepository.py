@@ -8,7 +8,6 @@ from utils.injector import Repository
 
 @Repository
 class SubmitRepository:
-
     taskRepository = TaskRepository
     userRepository = UserRepository
 
@@ -49,7 +48,7 @@ class SubmitRepository:
             student_result = await cls.get_student_submits_by_task(student_id, task)
             status = ""
             cnt = str(len(student_result))
-
+            hasv = False
             for submit in student_result:
 
                 match submit.result:
@@ -58,13 +57,14 @@ class SubmitRepository:
                             status = "+"
 
                     case "-":
-                        if status == "":
+                        if status in ["?", ""]:
                             status = "-"
 
                     case "?":
-                        if status in ["", "-"]:
-                            status = "?"
+                        hasv = True
 
+            if hasv and status in ["-", ""]:
+                status = "?"
             results[task] = status + cnt
 
         return results
@@ -74,7 +74,7 @@ class SubmitRepository:
         results = await cls.get_student_submits_by_task(student_id, task_name)
         table = PrettyTable()
 
-        table.field_names = ["Id послыки", "Результат"]
+        table.field_names = ["Id посылки", "Результат"]
         for result in results:
             table.add_row([result.submit_id, result.result])
 
