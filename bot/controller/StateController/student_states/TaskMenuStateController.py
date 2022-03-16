@@ -56,7 +56,7 @@ class TaskMenuStateController:
                 await ChangeState(States.student_menu, message)
 
             case _:
-                await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
+                await message.answer("Я Вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
 
     @classmethod
     async def prepare(cls, message: types.Message):
