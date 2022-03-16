@@ -13,4 +13,4 @@ class StartCommandController:
     @classmethod
     async def handler(cls, message: types.Message):
         await ChangeState(States.wait_auth, message)
-        await message.answer(cls.ASK_CODE)
+        await message.answer(cls.ASK_CODE, reply_markup=types.ReplyKeyboardRemove())

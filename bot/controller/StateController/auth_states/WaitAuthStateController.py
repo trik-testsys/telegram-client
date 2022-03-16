@@ -14,7 +14,9 @@ class WaitAuthStateController:
 
     SUCCESS_AUTH_TEACHER = "Вы успешно авторизованы как преподаватель!"
     SUCCESS_AUTH_STUDENT = "Вы успешно авторизованы как ученик!"
-    INCORRECT_CODE = "Пользователя с таким логином не существует, попробуйте еще раз"
+    INCORRECT_CODE = "Пользователя с таким логином не существует, попробуйте еще раз.\n"\
+                     + "Проверьте правильность написания логина (`student` и `Student` — два разных логина)"
+
 
     @classmethod
     async def handler(cls, message: types.Message):
@@ -22,7 +24,7 @@ class WaitAuthStateController:
         user = await cls.userRepository.get_user(message.text)
 
         if user is None:
-            await message.answer(cls.INCORRECT_CODE)
+            await message.answer(cls.INCORRECT_CODE, reply_markup=types.ReplyKeyboardRemove())
             return
 
         if user.role == "student":
