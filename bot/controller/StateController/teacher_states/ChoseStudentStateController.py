@@ -15,8 +15,8 @@ class ChoseStudentStateController:
     userRepository = UserRepository
 
     RESULTS = "Результаты"
-    CHOOSE_STUDENT = "Ученики"
-    BACK = "Назад"
+    CHOOSE_STUDENT = "Ученики ▸"
+    BACK = "◂ Назад"
 
     CHOOSE_STUDENT_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
     for student in userRepository.get_all_students():
@@ -32,6 +32,8 @@ class ChoseStudentStateController:
         if await cls.userRepository.is_student(message.text):
             cls.stateInfoRepository.get(message.from_user.id).chosen_student = message.text
             await ChangeState(States.chose_task, message)
+        else:
+            await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
 
     @classmethod
     async def prepare(cls, message: types.Message):

@@ -16,7 +16,7 @@ class SubmitStateController:
     stateInfoRepository = StateInfoRepository
     gradingService = GradingService
 
-    BACK = "Назад"
+    BACK = "◂ Назад"
     SEND_FILE = "Отправьте файл с решением или нажмите <<Назад>>"
     SENT = "Решение отправлено"
     NOT_SENT = "Решение не отправлено так как сервер проверки недоступен. Попробуйте позже"
@@ -25,7 +25,6 @@ class SubmitStateController:
 
     @classmethod
     async def handler(cls, message: types.Message):
-        print("lmao")
         if message.text == cls.BACK:
             await ChangeState(States.task_menu_student, message)
             return
@@ -37,11 +36,10 @@ class SubmitStateController:
         document_id = message.document.file_id
         file = await bot.download_file_by_id(document_id)
         state_info = cls.stateInfoRepository.get(message.from_user.id)
-        print("lol")
         submit_id = await cls.gradingService.send_task(state_info.chosen_task, state_info.user_id, file)
 
         if submit_id != cls.gradingService.ERROR:
-            await message.answer(f"{cls.SENT}, ID посылки: {submit_id}")
+            await message.answer(f"{cls.SENT}, ID попытки: {submit_id}")
             await ChangeState(States.task_menu_student, message)
         else:
             await message.answer(f"{cls.NOT_SENT}")

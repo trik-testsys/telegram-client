@@ -16,9 +16,9 @@ class TeacherMenuStateController:
     submitRepository = SubmitRepository
 
     RESULTS = "Результаты"
-    CHOOSE_STUDENT = "Ученики"
+    CHOOSE_STUDENT = "Ученики ▸"
     UNKNOWN_COMMAND = "Неизвестная команда"
-    BACK = "Назад"
+    BACK = "◂ Назад"
 
     CHOOSE_ACTION = "Выберите действие"
 
@@ -41,6 +41,7 @@ class TeacherMenuStateController:
                 await States.chose_student.set()
 
             case _:
+                await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
                 pass
 
     @classmethod

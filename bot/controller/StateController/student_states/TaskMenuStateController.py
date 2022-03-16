@@ -19,9 +19,9 @@ class TaskMenuStateController:
     stateInfoRepository = StateInfoRepository
 
     STATEMENT = "Условие"
-    SUBMIT_RESULTS = "Посылки"
-    SUBMIT = "Отправить"
-    BACK = "Назад"
+    SUBMIT_RESULTS = "Попытки"
+    SUBMIT = "Отправить ▸"
+    BACK = "◂ Назад"
 
     CHOOSE_ACTION = "Выберите действие"
 
@@ -54,6 +54,9 @@ class TaskMenuStateController:
 
             case cls.BACK:
                 await ChangeState(States.student_menu, message)
+
+            case _:
+                await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
 
     @classmethod
     async def prepare(cls, message: types.Message):

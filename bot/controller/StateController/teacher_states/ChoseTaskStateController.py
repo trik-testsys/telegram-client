@@ -19,8 +19,8 @@ class ChoseTaskStateController:
     stateInfoRepository = StateInfoRepository
 
     RESULTS = "Результаты"
-    CHOOSE_TASK = "Задачи ученика"
-    BACK = "Назад"
+    CHOOSE_TASK = "Задачи ученика ▸"
+    BACK = "◂ Назад"
 
     @classmethod
     async def create_CHOOSE_TASK_KEYBOARD(cls, message):
@@ -43,10 +43,12 @@ class ChoseTaskStateController:
         text = message.text.split()
 
         if len(text) < 2:
+            await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
             return
 
         task_name = text[1]
         if task_name not in cls.taskRepository.get_tasks():
+            await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
             return
 
         cls.stateInfoRepository.get(message.from_user.id).chosen_task = task_name

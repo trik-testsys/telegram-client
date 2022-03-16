@@ -9,7 +9,6 @@ from utils.injector import StateController, ChangeState
 
 @StateController(States.wait_auth, dp)
 class WaitAuthStateController:
-
     stateInfoRepository = StateInfoRepository
     userRepository = UserRepository
 
@@ -19,7 +18,6 @@ class WaitAuthStateController:
 
     @classmethod
     async def handler(cls, message: types.Message):
-        print(message.text)
 
         user = await cls.userRepository.get_user(message.text)
 
@@ -36,7 +34,6 @@ class WaitAuthStateController:
             await message.answer(cls.SUCCESS_AUTH_TEACHER)
             cls.stateInfoRepository.create(message.from_user.id, message.text)
             await ChangeState(States.teacher_menu, message)
-
 
     @classmethod
     async def prepare(cls, message: types.Message):
