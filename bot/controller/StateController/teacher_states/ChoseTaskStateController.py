@@ -19,8 +19,8 @@ class ChoseTaskStateController:
     stateInfoRepository = StateInfoRepository
 
     RESULTS = "Результаты"
-    CHOOSE_TASK = "Задачи ученика"
-    BACK = "Назад"
+    CHOOSE_TASK = "Задачи ученика ▸"
+    BACK = "◂ Назад"
 
     @classmethod
     async def create_CHOOSE_TASK_KEYBOARD(cls, message):
@@ -28,7 +28,7 @@ class ChoseTaskStateController:
         CHOOSE_TASK_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
         student_result = await cls.submitRepository.get_student_result(cls.stateInfoRepository.get(message.from_user.id).chosen_student)
         for task_name in student_result.keys():
-            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"{student_result[task_name]} {task_name}"))
+            CHOOSE_TASK_KEYBOARD.add(KeyboardButton(f"{task_name} {cls.new_result_view(student_result[task_name])} ▸"))
 
         CHOOSE_TASK_KEYBOARD.add(KeyboardButton(cls.BACK))
         return CHOOSE_TASK_KEYBOARD
@@ -42,11 +42,13 @@ class ChoseTaskStateController:
 
         text = message.text.split()
 
-        if len(text) != 2:
+        if len(text) < 2:
+            await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
             return
 
-        task_name = text[1]
+        task_name = text[0]
         if task_name not in cls.taskRepository.get_tasks():
+            await message.answer("Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
             return
 
         cls.stateInfoRepository.get(message.from_user.id).chosen_task = task_name
@@ -55,3 +57,17 @@ class ChoseTaskStateController:
     @classmethod
     async def prepare(cls, message: types.Message):
         await message.answer(cls.CHOOSE_TASK, reply_markup=await cls.create_CHOOSE_TASK_KEYBOARD(message))
+
+    @classmethod
+    def new_result_view(cls, res: str) -> str:
+
+        match res[0]:
+
+            case '+':
+                return res.replace("+", "✅ | Попыток: ")
+            case '-':
+                return res.replace("-", "❌ | Попыток: ")
+            case '?':
+                return res.replace("?", "🔄 | Попыток: ")
+            case '0':
+                return res.replace("0", " Попыток: 0")

@@ -19,16 +19,16 @@ class TaskMenuStateController:
     stateInfoRepository = StateInfoRepository
 
     STATEMENT = "Условие"
-    SUBMIT_RESULTS = "Послыки"
-    SUBMIT = "Отправить"
-    BACK = "Назад"
+    SUBMIT_RESULTS = "Попытки"
+    SUBMIT = "Отправить ▸"
+    BACK = "◂ Назад"
 
     CHOOSE_ACTION = "Выберите действие"
 
     TASK_MENU_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-    TASK_MENU_KEYBOARD.add(KeyboardButton(STATEMENT))
-    TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT_RESULTS))
     TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT))
+    TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT_RESULTS))
+    TASK_MENU_KEYBOARD.add(KeyboardButton(STATEMENT))
     TASK_MENU_KEYBOARD.add(KeyboardButton(BACK))
 
     @classmethod
@@ -55,6 +55,9 @@ class TaskMenuStateController:
             case cls.BACK:
                 await ChangeState(States.student_menu, message)
 
+            case _:
+                await message.answer("Я Вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")
+
     @classmethod
     async def prepare(cls, message: types.Message):
-        await message.reply(cls.CHOOSE_ACTION, reply_markup=cls.TASK_MENU_KEYBOARD)
+        await message.answer(cls.CHOOSE_ACTION, reply_markup=cls.TASK_MENU_KEYBOARD)

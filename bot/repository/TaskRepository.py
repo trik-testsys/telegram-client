@@ -1,3 +1,4 @@
+import logging
 import os
 
 from utils.injector import Repository
@@ -8,7 +9,6 @@ class TaskRepository:
 
     @classmethod
     def init_repository(cls, tasks_path="/tasks"):
-        print(os.path.abspath(".."))
         tasks = {}
 
         for taskName in os.listdir(tasks_path):

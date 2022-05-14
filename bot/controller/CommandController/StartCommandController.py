@@ -8,9 +8,9 @@ from utils.injector import CommandController, ChangeState
 @CommandController(["start"], dp)
 class StartCommandController:
 
-    ASK_CODE = "Отправьте, пожалуйста, свой код!"
+    ASK_CODE = "Введите свой логин"
 
     @classmethod
     async def handler(cls, message: types.Message):
         await ChangeState(States.wait_auth, message)
-        await message.answer(cls.ASK_CODE)
+        await message.answer(cls.ASK_CODE, reply_markup=types.ReplyKeyboardRemove())

@@ -17,8 +17,8 @@ class ChoseSubmitStateController:
     gradingService = GradingService
 
     RESULTS = "Результаты"
-    CHOOSE_SUBMIT = "Посылки по задаче"
-    BACK = "Назад"
+    CHOOSE_SUBMIT = "Попытки по задаче ▸"
+    BACK = "◂ Назад"
 
     SUBMIT = "Посылка ученика"
     SUBMIT_NOT_FOUND = "Не удалось получить посылку так как сервер недоступен. Попробуйте позже."
