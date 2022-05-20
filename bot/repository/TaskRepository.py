@@ -1,24 +1,23 @@
 import logging
 import os
 
-from utils.injector import Repository
+from bot.teletrik.DI import repository
 
 
-@Repository
+@repository
 class TaskRepository:
 
-    @classmethod
-    def init_repository(cls, tasks_path="/tasks"):
+    def __init__(self):
+        tasks_path = "/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/tasks"
         tasks = {}
 
-        for taskName in os.listdir(tasks_path):
-            taskPath = os.path.join(tasks_path, taskName)
-            tasks[taskName] = cls._get_statement(taskPath)
+        for task_name in os.listdir(tasks_path):
+            task_path = os.path.join(tasks_path, task_name)
+            tasks[task_name] = self._get_statement(task_path)
 
-        cls.tasks = tasks
+        self.tasks = tasks
 
-    @classmethod
-    def _get_statement(cls, task_path: str) -> str:
+    def _get_statement(self, task_path: str) -> str:
 
         for name in os.listdir(task_path):
 
@@ -28,6 +27,5 @@ class TaskRepository:
 
         raise Exception(f"Statement for task {task_path} not found")
 
-    @classmethod
-    def get_tasks(cls):
-        return cls.tasks
+    def get_tasks(self):
+        return self.tasks

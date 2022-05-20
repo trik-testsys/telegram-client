@@ -3,22 +3,22 @@ from aiogram.types import Message
 
 from bot.teletrik.Controller import Controller
 
-st = str
+State: TypeAlias = str | None
+Command: State = "command"
 
-HandlerFunc: TypeAlias = Callable[[Message], Coroutine[Any, Any, st]]
-Handler: TypeAlias = Tuple[int, HandlerFunc, HandlerFunc, st]
+HandlerFunc: TypeAlias = Callable[[Message], Coroutine[Any, Any, State]]
+Handler: TypeAlias = Tuple[HandlerFunc, HandlerFunc, State]
 
 _classes: Set[Type] = set()
 _instances: Dict[Type, object] = {}
 _handlers: List[Handler] = []
-_controllers: List[Tuple[Type[Controller], st, int]] = []
+_controllers: List[Tuple[Type[Controller], State]] = []
 
 
 def _init_cls(cls) -> object:
     obj: object = _instances.get(cls)
     if obj is not None:
         return obj
-
     init_args = cls.__init__.__annotations__
     args: List[object] = []
     for arg_name in init_args:
@@ -41,11 +41,13 @@ def _init_controller(cls: Type[Controller]) -> Controller:
     return cls(*args)
 
 
-def controller(state: str = None, order: int = 10):
+def controller(state: str = None):
 
     def f(cls):
         if issubclass(cls, Controller) and cls not in _classes:
-            _controllers.append((cls, state, order))
+            _controllers.append((cls, state))
+        else:
+            raise Exception("TODO 5")
         return cls
 
     return f
@@ -67,9 +69,9 @@ def inject(cls: Type) -> Type:
 
 def get_handlers() -> List[Handler]:
     result: List[Handler] = []
-    for (cont, state, order) in _controllers:
+    for (cont, state) in _controllers:
         obj: Controller = _init_controller(cont)
         handler: HandlerFunc = obj.handle
         prepare: HandlerFunc = obj.prepare
-        result.append((order, handler, prepare, state))
+        result.append((handler, prepare, state))
     return result

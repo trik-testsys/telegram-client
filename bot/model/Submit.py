@@ -1,5 +1,3 @@
-import os
-
 import peewee as pw
 
 
@@ -11,7 +9,7 @@ class Submit(pw.Model):
 
     class Meta:
 
-        database = pw.SqliteDatabase('/data/submit.sqlite', pragmas={
+        database = pw.SqliteDatabase('/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/bot/data/submit.sqlite', pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })
