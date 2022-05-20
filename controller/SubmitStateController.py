@@ -1,10 +1,10 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 
-from bot.controller.States import SubmitTask, TaskMenu
-from bot.repository.StateInfoRepository import StateInfoRepository
-from bot.service.GradingService import GradingService
-from bot.teletrik.Controller import Controller
-from bot.teletrik.DI import controller
+from controller.States import SubmitTask, TaskMenu
+from repository.StateInfoRepository import StateInfoRepository
+from service.GradingService import GradingService
+from teletrik.Controller import Controller
+from teletrik.DI import controller
 
 
 @controller(SubmitTask)

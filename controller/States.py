@@ -1,4 +1,4 @@
-from bot.teletrik.DI import State
+from teletrik.DI import State
 
 WaitAuth: State = "WaitAuth"
 TeacherMenu: State = "TeacherMenu"

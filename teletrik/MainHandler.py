@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from aiogram.types import Message
 
-from bot.teletrik.DI import Handler, State
+from teletrik.DI import Handler, State
 
 
 class MainHandler:

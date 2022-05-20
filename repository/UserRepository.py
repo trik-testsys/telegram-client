@@ -1,8 +1,5 @@
-import os
-import sys
-
-from bot.teletrik.DI import repository
-from bot.model.User import User
+from teletrik.DI import repository
+from model.User import User
 
 
 @repository

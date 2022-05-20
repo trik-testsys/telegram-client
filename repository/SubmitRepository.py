@@ -1,9 +1,9 @@
 from prettytable import PrettyTable
 
-from bot.repository.TaskRepository import TaskRepository
-from bot.repository.UserRepository import UserRepository
-from bot.model.Submit import Submit
-from bot.teletrik.DI import repository
+from repository.TaskRepository import TaskRepository
+from repository.UserRepository import UserRepository
+from model.Submit import Submit
+from teletrik.DI import repository
 
 
 @repository

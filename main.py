@@ -1,8 +1,6 @@
 import logging
 
-from bot.teletrik.Client import Client
-import controller
-
+from teletrik.Client import Client
 
 if __name__ == "__main__":
     client: Client = Client(api_key="")

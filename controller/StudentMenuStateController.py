@@ -1,12 +1,12 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, ParseMode
 
-from bot.controller.States import StudentMenu, TaskMenu
-from bot.repository.StateInfoRepository import StateInfoRepository
-from bot.repository.SubmitRepository import SubmitRepository
-from bot.repository.TaskRepository import TaskRepository
-from bot.teletrik.Controller import Controller
-from bot.teletrik.DI import controller, State
+from controller.States import StudentMenu, TaskMenu
+from repository.StateInfoRepository import StateInfoRepository
+from repository.SubmitRepository import SubmitRepository
+from repository.TaskRepository import TaskRepository
+from teletrik.Controller import Controller
+from teletrik.DI import controller, State
 
 
 @controller(StudentMenu)

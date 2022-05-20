@@ -1,7 +1,7 @@
 from typing import List, Dict, Type, Set, Callable, Tuple, TypeAlias, Coroutine, Any
 from aiogram.types import Message
 
-from bot.teletrik.Controller import Controller
+from teletrik.Controller import Controller
 
 State: TypeAlias = str | None
 Command: State = "command"

@@ -1,10 +1,10 @@
 from aiogram import types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-from bot.controller.States import TeacherMenu, ChoseStudent
-from bot.repository.SubmitRepository import SubmitRepository
-from bot.teletrik.Controller import Controller
-from bot.teletrik.DI import controller
+from controller.States import TeacherMenu, ChoseStudent
+from repository.SubmitRepository import SubmitRepository
+from teletrik.Controller import Controller
+from teletrik.DI import controller
 
 
 @controller(TeacherMenu)
