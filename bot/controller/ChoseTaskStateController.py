@@ -1,11 +1,11 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message
 
-from controller.States import ChoseTask, ChoseStudent, ChoseSubmit
-from repository.StateInfoRepository import StateInfoRepository
-from repository.SubmitRepository import SubmitRepository
-from repository.TaskRepository import TaskRepository
-from teletrik.Controller import Controller
-from teletrik.DI import controller
+from bot.controller.States import ChoseTask, ChoseStudent, ChoseSubmit
+from bot.repository.StateInfoRepository import StateInfoRepository
+from bot.repository.SubmitRepository import SubmitRepository
+from bot.repository.TaskRepository import TaskRepository
+from bot.teletrik.Controller import Controller
+from bot.teletrik.DI import controller
 
 
 @controller(ChoseTask)

@@ -1,9 +1,9 @@
 from prettytable import PrettyTable
 
-from repository.TaskRepository import TaskRepository
-from repository.UserRepository import UserRepository
-from model.Submit import Submit
-from teletrik.DI import repository
+from bot.repository.TaskRepository import TaskRepository
+from bot.repository.UserRepository import UserRepository
+from bot.model.Submit import Submit
+from bot.teletrik.DI import repository
 
 
 @repository
@@ -131,7 +131,7 @@ class SubmitRepository:
 <body>
 <header>
     <div class="header-img">
-        <img src="https://dl.trikset.com/logos/trik/trik_logo_eng_slogan_ru_big_green.png" alt="" width="35%">
+        <img bot="https://dl.trikset.com/logos/trik/trik_logo_eng_slogan_ru_big_green.png" alt="" width="35%">
     </div>
 </header>
             """

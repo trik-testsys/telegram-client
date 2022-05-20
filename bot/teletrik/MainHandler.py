@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from aiogram.types import Message
 
-from teletrik.DI import Handler, State
+from bot.teletrik.DI import Handler, State
 
 
 class MainHandler:
@@ -13,6 +13,7 @@ class MainHandler:
 
     async def main_handler(self, message: Message):
         idr: int = message.from_user.id
+        cur_state: State = self._states.get(idr)
 
         (command_handler, _, _) = self._find_command_handler()
         result: State = await command_handler(message)
@@ -22,8 +23,9 @@ class MainHandler:
             new_state: str = await handler(message)
             self._states[idr] = new_state
 
-            (_, prepare, _) = self._chose_handler(idr)
-            await prepare(message)
+            if cur_state != new_state:
+                (_, prepare, _) = self._chose_handler(idr)
+                await prepare(message)
         else:
             self._states[idr] = result
             (_, prepare, _) = self._chose_handler(idr)

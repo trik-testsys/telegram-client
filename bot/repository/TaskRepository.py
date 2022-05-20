@@ -1,13 +1,13 @@
 import os
 
-from teletrik.DI import repository
+from bot.teletrik.DI import repository
 
 
 @repository
 class TaskRepository:
 
     def __init__(self):
-        tasks_path = "/tasks"
+        tasks_path = "/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/tasks"
         tasks = {}
 
         for task_name in os.listdir(tasks_path):

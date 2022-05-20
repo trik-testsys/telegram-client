@@ -6,8 +6,8 @@ from aiogram.types import Message, ContentType
 from aiogram.utils import executor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from teletrik.DI import Handler, get_handlers
-from teletrik.MainHandler import MainHandler
+from bot.teletrik.DI import Handler, get_handlers
+from bot.teletrik.MainHandler import MainHandler
 
 
 class Client:

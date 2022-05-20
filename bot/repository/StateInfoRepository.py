@@ -1,4 +1,4 @@
-from teletrik.DI import repository
+from bot.teletrik.DI import repository
 
 
 class StateInfo:

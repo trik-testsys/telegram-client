@@ -9,7 +9,7 @@ class Submit(pw.Model):
 
     class Meta:
 
-        database = pw.SqliteDatabase('/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/bot/data/submit.sqlite', pragmas={
+        database = pw.SqliteDatabase('/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/data/submit.sqlite', pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })

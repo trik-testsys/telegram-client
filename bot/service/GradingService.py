@@ -2,8 +2,8 @@ import asyncio
 import logging
 import aiohttp
 
-from repository.SubmitRepository import SubmitRepository
-from teletrik.DI import service
+from bot.repository.SubmitRepository import SubmitRepository
+from bot.teletrik.DI import service
 
 
 @service

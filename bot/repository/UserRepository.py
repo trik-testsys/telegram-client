@@ -1,5 +1,5 @@
-from teletrik.DI import repository
-from model.User import User
+from bot.teletrik.DI import repository
+from bot.model.User import User
 
 
 @repository

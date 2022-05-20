@@ -1,8 +1,8 @@
 from aiogram.types import Message
 
-from controller.States import WaitAuth
-from teletrik.Controller import Controller
-from teletrik.DI import controller, Command, State
+from bot.controller.States import WaitAuth
+from bot.teletrik.Controller import Controller
+from bot.teletrik.DI import controller, Command, State
 
 
 @controller(Command)
