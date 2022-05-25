@@ -11,7 +11,6 @@ class StateInfo:
 
 @repository
 class StateInfoRepository:
-
     def __init__(self):
         self.state_info: dict[str, StateInfo] = {}
 

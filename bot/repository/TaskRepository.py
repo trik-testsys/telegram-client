@@ -6,7 +6,6 @@ from bot.teletrik.DI import repository
 
 @repository
 class TaskRepository:
-
     def __init__(self):
         tasks = {}
 

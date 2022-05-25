@@ -1,7 +1,6 @@
 from aiogram import types
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-
-from bot.controller.States import State, StudentMenu, TeacherMenu, WaitAuth, HelpMenu
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
+from bot.controller.States import HelpMenu, State, StudentMenu, TeacherMenu, WaitAuth
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.UserRepository import UserRepository
 from bot.teletrik.Controller import Controller
@@ -10,8 +9,11 @@ from bot.teletrik.DI import controller
 
 @controller(WaitAuth)
 class WaitAuthStateController(Controller):
-
-    def __init__(self, state_info_repository: StateInfoRepository, user_repository: UserRepository):
+    def __init__(
+        self,
+        state_info_repository: StateInfoRepository,
+        user_repository: UserRepository,
+    ):
         self.state_info_repository: StateInfoRepository = state_info_repository
         self.user_repository: UserRepository = user_repository
 
@@ -31,7 +33,9 @@ class WaitAuthStateController(Controller):
         user = await self.user_repository.get_by_user_id(message.text)
 
         if user is None:
-            await message.answer(self.INCORRECT_CODE, reply_markup=types.ReplyKeyboardRemove())
+            await message.answer(
+                self.INCORRECT_CODE, reply_markup=types.ReplyKeyboardRemove()
+            )
             return WaitAuth
 
         if user.role == "student":

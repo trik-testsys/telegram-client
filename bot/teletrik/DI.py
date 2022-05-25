@@ -1,6 +1,6 @@
-from typing import List, Dict, Type, Set, Callable, Tuple, TypeAlias, Coroutine, Any
-from aiogram.types import Message
+from typing import Any, Callable, Coroutine, Dict, List, Set, Tuple, Type, TypeAlias
 
+from aiogram.types import Message
 from bot.teletrik.Controller import Controller
 
 State: TypeAlias = str | None

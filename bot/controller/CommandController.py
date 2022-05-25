@@ -1,22 +1,21 @@
 from aiogram.types import Message
-
-from bot.controller.States import StudentMenu, HelpMenu
+from bot.controller.States import HelpMenu, StudentMenu
 from bot.model.User import User
 from bot.repository.StateInfoRepository import StateInfoRepository
-
 from bot.repository.UserRepository import UserRepository
 from bot.service.TokenService import TokenService
 from bot.teletrik.Controller import Controller
-from bot.teletrik.DI import controller, Command, State
+from bot.teletrik.DI import Command, controller, State
 
 
 @controller(Command)
 class CommandController(Controller):
-
-    def __init__(self,
-                 user_repository: UserRepository,
-                 token_service: TokenService,
-                 state_info_repository: StateInfoRepository):
+    def __init__(
+        self,
+        user_repository: UserRepository,
+        token_service: TokenService,
+        state_info_repository: StateInfoRepository,
+    ):
         self.user_repository: UserRepository = user_repository
         self.token_service: TokenService = token_service
         self.state_info_repository: StateInfoRepository = state_info_repository
@@ -32,9 +31,13 @@ class CommandController(Controller):
                 if user is None:
                     token: str = self.token_service.generate_new_token(tg_id)
                     await self.user_repository.create_user(token, "student", tg_id)
-                    self.state_info_repository.create(message.from_user.id, message.text)
+                    self.state_info_repository.create(
+                        message.from_user.id, message.text
+                    )
                 else:
-                    self.state_info_repository.create(message.from_user.id, message.text)
+                    self.state_info_repository.create(
+                        message.from_user.id, message.text
+                    )
                 return StudentMenu
 
             case "/help":

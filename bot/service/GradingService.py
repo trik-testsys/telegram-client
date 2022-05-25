@@ -1,15 +1,14 @@
 import asyncio
 import logging
-import aiohttp
 
+import aiohttp
+from bot.conf import GRADING_SERVICE_URL
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.teletrik.DI import service
-from bot.conf import GRADING_SERVICE_URL
 
 
 @service
 class GradingService:
-
     def __init__(self, submit_repository: SubmitRepository):
         self.url: str = f"{GRADING_SERVICE_URL}grading-system/submissions/submission/"
         self.ERROR: str = "error"
@@ -44,7 +43,9 @@ class GradingService:
     async def get_submissions_status(self, submit_id: str) -> str:
         async with aiohttp.ClientSession() as session:
 
-            async with session.get(f"{self.url}status", params={'id': submit_id}) as resp:
+            async with session.get(
+                f"{self.url}status", params={"id": submit_id}
+            ) as resp:
 
                 match resp.status:
 
@@ -57,7 +58,9 @@ class GradingService:
     async def get_submission(self, submit_id: str):
         async with aiohttp.ClientSession() as session:
 
-            async with session.get(f"{self.url}download", params={'id': submit_id}) as resp:
+            async with session.get(
+                f"{self.url}download", params={"id": submit_id}
+            ) as resp:
 
                 match resp.status:
 
@@ -70,7 +73,9 @@ class GradingService:
     async def get_lektorium_info(self, submit_id: str):
         async with aiohttp.ClientSession() as session:
 
-            async with session.get(f"{self.url}lectorium_info", params={'id': submit_id}) as resp:
+            async with session.get(
+                f"{self.url}lectorium_info", params={"id": submit_id}
+            ) as resp:
 
                 match resp.status:
 
@@ -81,7 +86,7 @@ class GradingService:
                         return self.ERROR
 
     async def _send_task(self, task_name: str, file) -> str:
-        params = {'task_name': task_name, 'file': file}
+        params = {"task_name": task_name, "file": file}
         timeout = aiohttp.ClientTimeout(total=5)
 
         try:

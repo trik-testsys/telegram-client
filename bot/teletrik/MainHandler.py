@@ -1,12 +1,10 @@
-from typing import List, Dict
+from typing import Dict, List
 
 from aiogram.types import Message
-
 from bot.teletrik.DI import Handler, State
 
 
 class MainHandler:
-
     def __init__(self, handlers: List[Handler]):
         self._handlers: List[Handler] = handlers
         self._states: Dict[int, str] = {}

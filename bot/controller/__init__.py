@@ -2,9 +2,9 @@ from . import ChoseStudentStateController
 from . import ChoseSubmitStateController
 from . import ChoseTaskStateController
 from . import CommandController
+from . import HelpMenuStateController
 from . import StudentMenuStateController
 from . import SubmitStateController
 from . import TaskMenuStateController
 from . import TeacherMenuStateController
 from . import WaitAuthStateController
-from . import HelpMenuStateController
