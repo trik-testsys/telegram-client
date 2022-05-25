@@ -27,7 +27,7 @@ jobs:
 
       - name: Install dev-requirements
         run: |
-          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
 
       - name: Run flake8
         run: |
