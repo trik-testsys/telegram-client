@@ -1,4 +1,4 @@
-name: Check code style
+name: flake8
 
 on:
   [ push, pull_request ]
