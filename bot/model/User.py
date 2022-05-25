@@ -1,3 +1,4 @@
+from bot.conf import PATH_TO_USER
 import peewee as pw
 
 
@@ -7,7 +8,6 @@ class User(pw.Model):
     role = pw.CharField()
 
     class Meta:
-        database = pw.SqliteDatabase("/data/user.sqlite", pragmas={
-            'journal_mode': 'wal',
-            'synchronous': 'normal'
-        })
+        database = pw.SqliteDatabase(
+            PATH_TO_USER, pragmas={"journal_mode": "wal", "synchronous": "normal"}
+        )

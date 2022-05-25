@@ -1,25 +1,26 @@
-import logging
-from typing import List, Coroutine, Callable, Any
+from logging import basicConfig
+from typing import Any, Callable, Coroutine, List
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, ContentType, BotCommand
+from aiogram.types import ContentType, Message
 from aiogram.utils import executor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-
-from bot.teletrik.DI import Handler, get_handlers, get_jobs
+from bot.conf import PATH_TO_LOGS
+from bot.teletrik.DI import get_handlers, get_jobs, Handler
 from bot.teletrik.MainHandler import MainHandler
 
 
 class Client:
-
     def __init__(self, api_key: str):
         self._bot: Bot = Bot(token=api_key)
         self._dp: Dispatcher = Dispatcher(self._bot)
         self._scheduler: AsyncIOScheduler = AsyncIOScheduler()
 
     def run(self, log_level: int):
-        logging.basicConfig(level=log_level, filename="/logs/bot.txt")
-        self._dp.register_message_handler(self._create_handler(), content_types=ContentType.ANY)
+        basicConfig(level=log_level, filename=PATH_TO_LOGS)
+        self._dp.register_message_handler(
+            self._create_handler(), content_types=ContentType.ANY
+        )
         self._add_scheduler_jobs()
         self._scheduler.start()
         executor.start_polling(self._dp, skip_updates=True)

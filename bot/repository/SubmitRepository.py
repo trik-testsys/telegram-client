@@ -1,21 +1,25 @@
-from prettytable import PrettyTable
-
+from bot.model.Submit import Submit
 from bot.repository.TaskRepository import TaskRepository
 from bot.repository.UserRepository import UserRepository
-from bot.model.Submit import Submit
 from bot.teletrik.DI import repository
+from prettytable import PrettyTable
 
 
 @repository
 class SubmitRepository:
-
-    def __init__(self, task_repository: TaskRepository, user_repository: UserRepository):
+    def __init__(
+        self, task_repository: TaskRepository, user_repository: UserRepository
+    ):
         Submit.create_table()
         self.task_repository: TaskRepository = task_repository
         self.user_repository: UserRepository = user_repository
 
-    async def create_submit(self, submit_id: str, student_id: str, task_name: str) -> None:
-        Submit.create(submit_id=submit_id, student_id=student_id, task_name=task_name, result="?")
+    async def create_submit(
+        self, submit_id: str, student_id: str, task_name: str
+    ) -> None:
+        Submit.create(
+            submit_id=submit_id, student_id=student_id, task_name=task_name, result="?"
+        )
 
     async def update_submit_result(self, submit_id: str, result: str) -> None:
         submit = Submit.get(Submit.submit_id == submit_id)
@@ -28,8 +32,12 @@ class SubmitRepository:
     async def get_student_submits(self, student_id: str) -> list[Submit]:
         return Submit.select().where(Submit.student_id == student_id)
 
-    async def get_student_submits_by_task(self, student_id: str, task_name: str) -> list[Submit]:
-        return Submit.select().where((Submit.student_id == student_id) & (Submit.task_name == task_name))
+    async def get_student_submits_by_task(
+        self, student_id: str, task_name: str
+    ) -> list[Submit]:
+        return Submit.select().where(
+            (Submit.student_id == student_id) & (Submit.task_name == task_name)
+        )
 
     async def get_student_result(self, student_id: str) -> dict[str, str]:
         results = {}
@@ -62,7 +70,9 @@ class SubmitRepository:
 
         return results
 
-    async def get_student_submits_view(self, student_id: str, task_name: str) -> PrettyTable:
+    async def get_student_submits_view(
+        self, student_id: str, task_name: str
+    ) -> PrettyTable:
         results = await self.get_student_submits_by_task(student_id, task_name)
         table = PrettyTable()
 
@@ -73,7 +83,6 @@ class SubmitRepository:
         return table
 
     async def get_all_results_view(self):
-
         def get_class_name(s):
             match s:
                 case "+":
@@ -85,8 +94,7 @@ class SubmitRepository:
                 case "0":
                     return "none"
 
-        top = \
-            """
+        top = """
             <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -153,7 +161,7 @@ class SubmitRepository:
             for result in sorted(student_result.keys()):
                 symbol = student_result[result][0]
                 class_name = get_class_name(symbol)
-                table += f"<td class=\"{class_name}\">{student_result[result]}</td>"
+                table += f'<td class="{class_name}">{student_result[result]}</td>'
             table += "</tr>"
             cnt += 1
 
@@ -165,9 +173,27 @@ class SubmitRepository:
     async def get_task_stat_view(self, task_name):
 
         stat = f"Задача: {task_name}: \n"
-        correct_cnt = len(list(Submit.select().where((Submit.task_name == task_name) & (Submit.result == "+"))))
-        incorrect_cnt = len(list(Submit.select().where((Submit.task_name == task_name) & (Submit.result == "-"))))
-        on_review_cnt = len(list(Submit.select().where((Submit.task_name == task_name) & (Submit.result == "?"))))
+        correct_cnt = len(
+            list(
+                Submit.select().where(
+                    (Submit.task_name == task_name) & (Submit.result == "+")
+                )
+            )
+        )
+        incorrect_cnt = len(
+            list(
+                Submit.select().where(
+                    (Submit.task_name == task_name) & (Submit.result == "-")
+                )
+            )
+        )
+        on_review_cnt = len(
+            list(
+                Submit.select().where(
+                    (Submit.task_name == task_name) & (Submit.result == "?")
+                )
+            )
+        )
         stat += f"Посылок: Правильных {correct_cnt} | Неправильных {incorrect_cnt} | На проверке {on_review_cnt} \n"
         return stat
 

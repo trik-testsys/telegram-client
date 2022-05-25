@@ -1,12 +1,11 @@
 from typing import List
 
-from bot.teletrik.DI import repository
 from bot.model.User import User
+from bot.teletrik.DI import repository
 
 
 @repository
 class UserRepository:
-
     def __init__(self):
         User.create_table()
 
@@ -35,4 +34,3 @@ class UserRepository:
     async def user_exist(user_id: str) -> bool:
         users: List[User] = User().select().where(User.user_id == user_id)
         return len(users) == 0
-

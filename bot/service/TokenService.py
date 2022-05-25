@@ -1,11 +1,11 @@
-from bot.teletrik.DI import service
-from time import time
 from hashlib import md5
+from time import time
+
+from bot.teletrik.DI import service
 
 
 @service
 class TokenService:
-
     def __init__(self):
         pass
 

@@ -1,3 +1,4 @@
+from bot.conf import PATH_TO_SUBMIT
 import peewee as pw
 
 
@@ -9,7 +10,6 @@ class Submit(pw.Model):
 
     class Meta:
 
-        database = pw.SqliteDatabase('/data/submit.sqlite', pragmas={
-            'journal_mode': 'wal',
-            'synchronous': 'normal'
-        })
+        database = pw.SqliteDatabase(
+            PATH_TO_SUBMIT, pragmas={"journal_mode": "wal", "synchronous": "normal"}
+        )

@@ -1,17 +1,16 @@
 import os
 
+from bot.conf import PATH_TO_TASKS
 from bot.teletrik.DI import repository
 
 
 @repository
 class TaskRepository:
-
     def __init__(self):
-        tasks_path = "/tasks"
         tasks = {}
 
-        for task_name in os.listdir(tasks_path):
-            task_path = os.path.join(tasks_path, task_name)
+        for task_name in os.listdir(PATH_TO_TASKS):
+            task_path = os.path.join(PATH_TO_TASKS, task_name)
             tasks[task_name] = self._get_statement(task_path)
 
         self.tasks = tasks

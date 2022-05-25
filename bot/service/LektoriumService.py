@@ -10,11 +10,12 @@ from bot.teletrik.DI import service
 
 @service
 class LektoriumService:
-
-    def __init__(self,
-                 submit_repository: SubmitRepository,
-                 user_repository: UserRepository,
-                 grading_service: GradingService):
+    def __init__(
+        self,
+        submit_repository: SubmitRepository,
+        user_repository: UserRepository,
+        grading_service: GradingService,
+    ):
         self.submit_repository: SubmitRepository = submit_repository
         self.user_repository: UserRepository = user_repository
         self.grading_service: GradingService = grading_service
@@ -32,7 +33,9 @@ class LektoriumService:
         return json.loads(result)
 
     async def _get_positive_submit_id(self, task_name: str, user_id: str) -> str | None:
-        submits: List[Submit] = await self.submit_repository.get_student_submits_by_task(user_id, task_name)
+        submits: List[
+            Submit
+        ] = await self.submit_repository.get_student_submits_by_task(user_id, task_name)
         for submit in submits:
             if submit.result == "+":
                 return submit.submit_id
