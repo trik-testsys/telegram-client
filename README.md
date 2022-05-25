@@ -1,3 +1,4 @@
+[![CodeFactor](https://www.codefactor.io/repository/github/pupsen-vupsen/trik-testsys-telegram-client/badge)](https://www.codefactor.io/repository/github/pupsen-vupsen/trik-testsys-telegram-client)
 # Клиент тестирующей системы для среды программирования TRIK Studio
 
 ## Описание
