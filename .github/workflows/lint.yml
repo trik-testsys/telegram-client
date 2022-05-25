@@ -5,7 +5,7 @@ on:
 
 jobs:
 
-  Check_code_style:
+  flake8:
 
     runs-on: ubuntu-latest
 
