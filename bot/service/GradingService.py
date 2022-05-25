@@ -4,13 +4,14 @@ import aiohttp
 
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.teletrik.DI import service
+from bot.conf import GRADING_SERVICE_URL
 
 
 @service
 class GradingService:
 
     def __init__(self, submit_repository: SubmitRepository):
-        self.url: str = "http://testsys:8080/grading-system/submissions/submission/"
+        self.url: str = f"{GRADING_SERVICE_URL}grading-system/submissions/submission/"
         self.ERROR: str = "error"
         self.submit_repository: SubmitRepository = submit_repository
 
