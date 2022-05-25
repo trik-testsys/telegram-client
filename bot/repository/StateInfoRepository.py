@@ -1,4 +1,4 @@
-from utils.injector import Repository
+from bot.teletrik.DI import repository
 
 
 class StateInfo:
@@ -9,19 +9,14 @@ class StateInfo:
         self.user_id = user_id
 
 
-@Repository
+@repository
 class StateInfoRepository:
 
-    state_info: dict[str, StateInfo] = {}
+    def __init__(self):
+        self.state_info: dict[str, StateInfo] = {}
 
-    @classmethod
-    def init_repository(cls):
-        pass
+    def create(self, telegram_id: str, user_id: str):
+        self.state_info[telegram_id] = StateInfo(user_id)
 
-    @classmethod
-    def create(cls, telegram_id: str, user_id: str):
-        cls.state_info[telegram_id] = StateInfo(user_id)
-
-    @classmethod
-    def get(cls, telegram_id) -> StateInfo:
-        return cls.state_info[telegram_id]
+    def get(self, telegram_id) -> StateInfo:
+        return self.state_info[telegram_id]

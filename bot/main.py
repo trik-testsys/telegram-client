@@ -1,26 +1,9 @@
 import logging
-import loader
+
+from bot.teletrik.Client import Client
 import controller
 
-from aiogram.utils import executor
-from bot.service.GradingService import GradingService
+if __name__ == "__main__":
+    client: Client = Client(api_key="")
+    client.run(log_level=logging.DEBUG)
 
-
-def fix_handlers_order():
-    start = loader.dp.message_handlers.handlers[8]
-    first = loader.dp.message_handlers.handlers[0]
-
-    loader.dp.message_handlers.handlers[0] = start
-    loader.dp.message_handlers.handlers[8] = first
-
-
-def main():
-    logging.basicConfig(level=logging.DEBUG, filename="/logs/bot.txt")
-    loader.scheduler.add_job(GradingService.update_all_submits_status, "interval", seconds=30)
-    loader.scheduler.start()
-    fix_handlers_order()
-    executor.start_polling(loader.dp, skip_updates=True)
-
-
-if __name__ == '__main__':
-    main()
