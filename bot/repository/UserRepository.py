@@ -1,3 +1,5 @@
+from typing import List
+
 from bot.teletrik.DI import repository
 from bot.model.User import User
 
@@ -8,30 +10,29 @@ class UserRepository:
     def __init__(self):
         User.create_table()
 
-    async def get_all_users(self):
+    @staticmethod
+    async def get_all_users():
         return User.select()
 
-    def get_all_students(self):
+    @staticmethod
+    def get_all_students():
         result = [i.user_id for i in User.select().where(User.role == "student")]
         return result
 
-    async def get_all_teachers(self):
-        return User.select().where(User.role == "teacher")
+    @staticmethod
+    async def create_user(user_id: str, role: str, tg_id: str) -> None:
+        User.create(user_id=user_id, role=role, telegram_id=tg_id)
 
-    async def create_user(self, user_id: str, role: str) -> None:
-        User.create(user_id=user_id, role=role)
+    @staticmethod
+    async def get_by_user_id(user_id: str) -> User | None:
+        return User.get_or_none(User.user_id == user_id)
 
-    async def is_teacher(self, user_id):
-        user = User.get(User.user_id == user_id)
-        return user.role == "teacher"
+    @staticmethod
+    async def get_by_telegram_id(telegram_id: str) -> User | None:
+        return User.get_or_none(User.telegram_id == telegram_id)
 
-    async def is_student(self, user_id):
-        user = User.get(User.user_id == user_id)
-        return user.role == "student"
+    @staticmethod
+    async def user_exist(user_id: str) -> bool:
+        users: List[User] = User().select().where(User.user_id == user_id)
+        return len(users) == 0
 
-    async def get_user(self, user_id):
-        users = User.select().where(User.user_id == user_id)
-        if len(users) == 0:
-            return None
-        else:
-            return users[0]

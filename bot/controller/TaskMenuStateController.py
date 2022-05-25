@@ -8,6 +8,7 @@ from bot.repository.TaskRepository import TaskRepository
 
 import aiogram.utils.markdown as md
 
+from bot.service.LektoriumService import LektoriumService
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
 
@@ -18,13 +19,16 @@ class TaskMenuStateController(Controller):
     def __init__(self,
                  task_repository: TaskRepository,
                  submit_repository: SubmitRepository,
-                 state_info_repository: StateInfoRepository):
+                 state_info_repository: StateInfoRepository,
+                 lektorium_service: LektoriumService):
         self.task_repository: TaskRepository = task_repository
         self.submit_repository: SubmitRepository = submit_repository
         self.state_info_repository: StateInfoRepository = state_info_repository
+        self.lektorium_service: LektoriumService = lektorium_service
 
     STATEMENT = "Условие"
     SUBMIT_RESULTS = "Попытки"
+    DATA_FOR_LEKTORIUM = "Данные для Лекториума"
     SUBMIT = "Отправить ▸"
     BACK = "◂ Назад"
 
@@ -33,6 +37,7 @@ class TaskMenuStateController(Controller):
     TASK_MENU_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
     TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT))
     TASK_MENU_KEYBOARD.add(KeyboardButton(SUBMIT_RESULTS))
+    TASK_MENU_KEYBOARD.add(KeyboardButton(DATA_FOR_LEKTORIUM))
     TASK_MENU_KEYBOARD.add(KeyboardButton(STATEMENT))
     TASK_MENU_KEYBOARD.add(KeyboardButton(BACK))
 
@@ -61,6 +66,19 @@ class TaskMenuStateController(Controller):
 
             case self.BACK:
                 return StudentMenu
+
+            case self.DATA_FOR_LEKTORIUM:
+                tg_id = message.from_user.id
+                user_info = self.state_info_repository.get(tg_id)
+                result = await self.lektorium_service.get_task_info(user_info.chosen_task, user_info.user_id)
+                match result:
+                    case self.lektorium_service.NO_POSITIVE_SUBMIT:
+                        await message.answer("Вы не можете получить данные для лекториума, так как не сдали задачу")
+                    case self.lektorium_service.GRADING_ERROR:
+                        await message.answer("Сервер проверки сейчас недоступен, попробуйте позже")
+                    case _:
+                        await message.answer(f"hash: {result['hash']}\npin: {result['pin']}")
+                return TaskMenu
 
             case _:
                 await message.answer("Я Вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры")

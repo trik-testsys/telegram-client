@@ -7,3 +7,4 @@ from . import SubmitStateController
 from . import TaskMenuStateController
 from . import TeacherMenuStateController
 from . import WaitAuthStateController
+from . import RegisterStateController

@@ -33,7 +33,6 @@ class MainHandler:
 
     def _chose_handler(self, idr: int) -> Handler:
         cur_state = self._states.get(idr)
-        print(self._handlers)
         for (handler, prep, state) in self._handlers:
             if cur_state == state:
                 return handler, prep, state

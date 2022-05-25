@@ -3,10 +3,11 @@ import peewee as pw
 
 class User(pw.Model):
     user_id = pw.CharField(unique=True, primary_key=True)
+    telegram_id = pw.CharField(unique=True)
     role = pw.CharField()
 
     class Meta:
-        database = pw.SqliteDatabase("/home/viktor/Projects/PycharmProjects/trik-testsys-telegram-client/data/user.sqlite", pragmas={
+        database = pw.SqliteDatabase("/data/user.sqlite", pragmas={
             'journal_mode': 'wal',
             'synchronous': 'normal'
         })

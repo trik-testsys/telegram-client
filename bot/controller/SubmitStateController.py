@@ -34,7 +34,7 @@ class SubmitStateController(Controller):
         state_info = self.state_info_repository.get(message.from_user.id)
         submit_id = await self.grading_service.send_task(state_info.chosen_task, state_info.user_id, file)
 
-        if submit_id != self.gradingService.ERROR:
+        if submit_id != self.grading_service.ERROR:
             await message.answer(f"{self.SENT}, ID попытки: {submit_id}")
             return TaskMenu
         else:

@@ -14,6 +14,9 @@ class GradingService:
         self.ERROR: str = "error"
         self.submit_repository: SubmitRepository = submit_repository
 
+    async def scheduled(self):
+        await self.update_all_submits_status()
+
     async def update_all_submits_status(self):
         submits = await self.submit_repository.get_all_results()
 
@@ -63,6 +66,19 @@ class GradingService:
                     case _:
                         return self.ERROR
 
+    async def get_lektorium_info(self, submit_id: str):
+        async with aiohttp.ClientSession() as session:
+
+            async with session.get(f"{self.url}lectorium_info", params={'id': submit_id}) as resp:
+
+                match resp.status:
+
+                    case 200:
+                        return await resp.read()
+
+                    case _:
+                        return self.ERROR
+
     async def _send_task(self, task_name: str, file) -> str:
         params = {'task_name': task_name, 'file': file}
         timeout = aiohttp.ClientTimeout(total=5)
@@ -81,5 +97,4 @@ class GradingService:
                             return self.ERROR
 
         except asyncio.exceptions.TimeoutError:
-            logging.info("AAAAAAAAAAAAAAAAAAAAAAA")
             return self.ERROR

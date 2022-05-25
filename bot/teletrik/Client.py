@@ -1,12 +1,12 @@
 import logging
-from typing import List, Tuple, Coroutine, Callable, Any
+from typing import List, Coroutine, Callable, Any
 
 from aiogram import Bot, Dispatcher
-from aiogram.types import Message, ContentType
+from aiogram.types import Message, ContentType, BotCommand
 from aiogram.utils import executor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from bot.teletrik.DI import Handler, get_handlers
+from bot.teletrik.DI import Handler, get_handlers, get_jobs
 from bot.teletrik.MainHandler import MainHandler
 
 
@@ -16,25 +16,19 @@ class Client:
         self._bot: Bot = Bot(token=api_key)
         self._dp: Dispatcher = Dispatcher(self._bot)
         self._scheduler: AsyncIOScheduler = AsyncIOScheduler()
-        self._scheduler_jobs: List[Tuple[Coroutine, int]] = []
 
     def run(self, log_level: int):
-        logging.basicConfig(level=log_level, filename="bot.txt")
+        logging.basicConfig(level=log_level, filename="/logs/bot.txt")
+        self._dp.register_message_handler(self._create_handler(), content_types=ContentType.ANY)
         self._add_scheduler_jobs()
         self._scheduler.start()
-        self._dp.register_message_handler(self._create_handler(), content_types=ContentType.ANY)
         executor.start_polling(self._dp, skip_updates=True)
 
-    def add_scheduler_job(self, job: Coroutine, interval: int):
-        self._scheduler_jobs.append((job, interval))
-
     def _add_scheduler_jobs(self):
-        for (job, interval) in self._scheduler_jobs:
-            self._scheduler.add_job(job, "interval", seconds=interval)
+        for job in get_jobs():
+            self._scheduler.add_job(job, "interval", seconds=30)
 
     @staticmethod
     def _create_handler() -> Callable[[Message], Coroutine[Any, Any, None]]:
         handlers: List[Handler] = get_handlers()
         return MainHandler(handlers).main_handler
-
-

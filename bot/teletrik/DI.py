@@ -42,7 +42,6 @@ def _init_controller(cls: Type[Controller]) -> Controller:
 
 
 def controller(state: str = None):
-
     def f(cls):
         if issubclass(cls, Controller) and cls not in _classes:
             _controllers.append((cls, state))
@@ -65,6 +64,14 @@ def inject(cls: Type) -> Type:
     if cls not in _classes:
         _classes.add(cls)
     return cls
+
+
+def get_jobs():
+    res = []
+    for obj in _instances.values():
+        if obj.__class__.__dict__.get("scheduled") is not None:
+            res.append(obj.scheduled)
+    return res
 
 
 def get_handlers() -> List[Handler]:
