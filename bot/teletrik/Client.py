@@ -6,6 +6,7 @@ from aiogram.types import Message, ContentType, BotCommand
 from aiogram.utils import executor
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from bot.conf import PATH_TO_LOGS
 from bot.teletrik.DI import Handler, get_handlers, get_jobs
 from bot.teletrik.MainHandler import MainHandler
 
@@ -18,7 +19,7 @@ class Client:
         self._scheduler: AsyncIOScheduler = AsyncIOScheduler()
 
     def run(self, log_level: int):
-        logging.basicConfig(level=log_level, filename="/logs/bot.txt")
+        logging.basicConfig(level=log_level, filename=PATH_TO_LOGS)
         self._dp.register_message_handler(self._create_handler(), content_types=ContentType.ANY)
         self._add_scheduler_jobs()
         self._scheduler.start()
