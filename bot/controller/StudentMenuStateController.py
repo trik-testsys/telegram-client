@@ -12,7 +12,7 @@ from bot.teletrik.DI import controller, State
 class StudentMenuController(Controller):
     UPDATE = "Обновить результаты"
     CHOOSE_ACTION = "Выберите задачу"
-    HELP = "Помощь"
+    HELP = "Помощь ▸"
 
     def __init__(
         self,
