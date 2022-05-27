@@ -4,5 +4,3 @@ PATH_TO_TASKS = "/tasks"
 GRADING_SERVICE_URL = "http://testsys:8080/"
 PATH_TO_LOGS = "/logs/bot.txt"
 PATH_TO_KEY = "secrets/bot_key.txt"
-
-
