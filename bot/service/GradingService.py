@@ -37,9 +37,6 @@ class GradingService:
 
         return submit_id
 
-    async def get_submit(self, submit_id: str):
-        return await self.get_submission(submit_id)
-
     async def get_submissions_status(self, submit_id: str) -> str:
         async with aiohttp.ClientSession() as session:
 
