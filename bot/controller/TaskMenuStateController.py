@@ -79,7 +79,7 @@ class TaskMenuStateController(Controller):
                 match result:
                     case self.lektorium_service.NO_POSITIVE_SUBMIT:
                         await message.answer(
-                            "Вы не можете получить данные для лекториума, так как не сдали задачу"
+                            "Вы не можете получить данные для Лекториума, так как не сдали задачу"
                         )
                     case self.lektorium_service.GRADING_ERROR:
                         await message.answer(

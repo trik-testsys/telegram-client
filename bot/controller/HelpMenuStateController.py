@@ -26,7 +26,7 @@ class HelpMenuStateController(Controller):
     REMEMBER = "Напомнить токен"
     HOW_TO_SUBMIT = "ℹ️ Как сдать задачу"
     HOW_TO_CHECK_RESULT = "ℹ️ Как узнать результат"
-    HOW_TO_LEKTORIUM = "ℹ️ Информация для лекториума"
+    HOW_TO_LEKTORIUM = "ℹ️ Информация для Лекториума"
     HOW_TO_UNDERSTAND_RESULT_SUBMIT = "ℹ️ Что означают + - ?"
     HOW_TO_UNDERSTAND_RESULT_TASK = "ℹ️ Что означают ✅ ❌ 🔄"
 
@@ -59,12 +59,12 @@ class HelpMenuStateController(Controller):
                     token: str = self.token_service.generate_new_token(tg_id)
                     await self.user_repository.create_user(token, "student", tg_id)
                     self.state_info_repository.create(
-                        message.from_user.id, message.text
+                        message.from_user.id, token
                     )
                     return StudentMenu
                 else:
                     self.state_info_repository.create(
-                        message.from_user.id, message.text
+                        message.from_user.id, user.user_id
                     )
                     return StudentMenu
 
@@ -103,7 +103,7 @@ class HelpMenuStateController(Controller):
                 return HelpMenu
             case self.HOW_TO_LEKTORIUM:
                 await message.answer(
-                    """*Как узнать информацию для лекториума?*
+                    """*Как узнать информацию для Лекториума?*
 1. Нажмите на кнопку с задачей, за которую у вас стоит ✅.
 2. Нажмите на кнопку `Данные для Лектоиума`. Бот вам ответит сообщением, которое содержит "hash" и "pin".
 3. Скопируйте "hash" и "pin" и введите в соответсвующие поля на сайте Лекториума.""",

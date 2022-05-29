@@ -53,7 +53,7 @@ class ChoseSubmitStateController(Controller):
 
         submit_id = text[1]
         await message.answer(self.SUBMIT)
-        file = await self.grading_service.get_submit(submit_id)
+        file = await self.grading_service.get_submission(submit_id)
         if file != self.grading_service.ERROR:
             await message.bot.send_document(
                 message.from_user.id, (f"submit_{submit_id}.qrs", file)
