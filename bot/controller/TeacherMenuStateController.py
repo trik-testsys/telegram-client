@@ -4,6 +4,7 @@ from bot.controller.States import ChoseStudent, TeacherMenu
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
+from bot.view.SubmitView import SubmitView
 
 
 @controller(TeacherMenu)
@@ -21,19 +22,22 @@ class TeacherMenuStateController(Controller):
         KeyboardButton(CHOOSE_STUDENT),
     )
 
-    def __init__(self, submit_repository: SubmitRepository):
+    def __init__(self,
+                 submit_repository: SubmitRepository,
+                 submit_view: SubmitView):
         self.submit_repository: SubmitRepository = submit_repository
+        self.submit_view: SubmitView = submit_view
 
     async def handle(self, message: types.Message):
         match message.text:
 
             case self.RESULTS:
-                results = await self.submit_repository.get_stat_view()
+                results = await self.submit_view.get_stat_view()
                 await message.answer(results, reply_markup=self.TEACHER_MENU_KEYBOARD)
                 return TeacherMenu
 
             case self.FULL_RESULTS:
-                results = await self.submit_repository.get_all_results_view()
+                results = await self.submit_view.get_all_results_view()
                 await message.bot.send_document(
                     message.from_user.id, ("results.html", results)
                 )

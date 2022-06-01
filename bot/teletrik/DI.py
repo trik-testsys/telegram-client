@@ -19,11 +19,13 @@ def _init_cls(cls) -> object:
     obj: object = _instances.get(cls)
     if obj is not None:
         return obj
+
     init_args = cls.__init__.__annotations__
     args: List[object] = []
     for arg_name in init_args:
         arg_type = init_args[arg_name]
-        args.append(_init_cls(arg_type))
+        if arg_type is not None:
+            args.append(_init_cls(arg_type))
 
     obj = cls(*args)
     _instances[cls] = obj
@@ -34,9 +36,11 @@ def _init_cls(cls) -> object:
 def _init_controller(cls: Type[Controller]) -> Controller:
     init_args = cls.__init__.__annotations__
     args: List[object] = []
+    print(init_args)
     for arg_name in init_args:
         arg_type = init_args[arg_name]
-        args.append(_init_cls(arg_type))
+        if arg_type is not None:
+            args.append(_init_cls(arg_type))
 
     return cls(*args)
 
@@ -57,6 +61,10 @@ def repository(cls: Type) -> Type:
 
 
 def service(cls: Type) -> Type:
+    return inject(cls)
+
+
+def view(cls: Type) -> Type:
     return inject(cls)
 
 
