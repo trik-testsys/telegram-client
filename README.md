@@ -23,11 +23,15 @@ Grading system client for TRIK studio, which allows to send task to test and vie
 3. Run bot:
 `python3 main.py`
 
-## Authors
-* Viktor Karasev - [KarasssDev](https://github.com/KarasssDev)
+## Code Style
+In this project we use [CodeFactor](https://www.codefactor.io) and [flake8](https://github.com/PyCQA/flake8) to check code style. 
+[Black](https://github.com/psf/black) for formatting.
 
 ## Contributing
 Please, follow [Contributing](CONTRIBUTING.md) page.
+
+## Authors
+* Viktor Karasev - [KarasssDev](https://github.com/KarasssDev)
 
 ## License
 This project is Apache License 2.0 - see the [LICENSE](LICENSE) file for details
