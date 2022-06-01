@@ -7,6 +7,7 @@ from bot.repository.TaskRepository import TaskRepository
 from bot.service.LektoriumService import LektoriumService
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
+from bot.view.SubmitView import SubmitView
 
 
 @controller(TaskMenu)
@@ -17,11 +18,13 @@ class TaskMenuStateController(Controller):
         submit_repository: SubmitRepository,
         state_info_repository: StateInfoRepository,
         lektorium_service: LektoriumService,
+        submit_view: SubmitView
     ):
         self.task_repository: TaskRepository = task_repository
         self.submit_repository: SubmitRepository = submit_repository
         self.state_info_repository: StateInfoRepository = state_info_repository
         self.lektorium_service: LektoriumService = lektorium_service
+        self.submit_view: SubmitView = submit_view
 
     STATEMENT = "Условие"
     SUBMIT_RESULTS = "Попытки"
@@ -54,7 +57,7 @@ class TaskMenuStateController(Controller):
 
             case self.SUBMIT_RESULTS:
                 state_info = self.state_info_repository.get(message.from_user.id)
-                results = await self.submit_repository.get_student_submits_view(
+                results = await self.submit_view.get_student_submits_view(
                     state_info.user_id, state_info.chosen_task
                 )
                 await message.answer(

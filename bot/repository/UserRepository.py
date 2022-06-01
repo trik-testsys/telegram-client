@@ -6,17 +6,16 @@ from bot.teletrik.DI import repository
 
 @repository
 class UserRepository:
-    def __init__(self):
+    def __init__(self) -> None:
         User.create_table()
 
     @staticmethod
-    async def get_all_users():
-        return User.select()
+    async def get_all_students() -> List[User]:
+        return User.select().where(User.role == "student")
 
     @staticmethod
-    def get_all_students():
-        result = [i.user_id for i in User.select().where(User.role == "student")]
-        return result
+    async def get_by_role(role: str) -> List[User]:
+        return User.select().where(User.role == role)
 
     @staticmethod
     async def create_user(user_id: str, role: str, tg_id: str) -> None:
@@ -29,8 +28,3 @@ class UserRepository:
     @staticmethod
     async def get_by_telegram_id(telegram_id: str) -> User | None:
         return User.get_or_none(User.telegram_id == telegram_id)
-
-    @staticmethod
-    async def user_exist(user_id: str) -> bool:
-        users: List[User] = User().select().where(User.user_id == user_id)
-        return len(users) == 0

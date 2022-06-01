@@ -1,10 +1,12 @@
+from typing import List
+
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from bot.controller.States import ChoseStudent, ChoseTask, TeacherMenu
 from bot.model.User import User
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.UserRepository import UserRepository
 from bot.teletrik.Controller import Controller
-from bot.teletrik.DI import controller
+from bot.teletrik.DI import controller, State
 
 
 @controller(ChoseStudent)
@@ -13,7 +15,7 @@ class ChoseStudentStateController(Controller):
         self,
         state_info_repository: StateInfoRepository,
         user_repository: UserRepository,
-    ):
+    ) -> None:
         self.state_info_repository: StateInfoRepository = state_info_repository
         self.user_repository: UserRepository = user_repository
 
@@ -22,16 +24,13 @@ class ChoseStudentStateController(Controller):
     CHOOSE_STUDENT = "Ученики ▸"
     BACK = "◂ Назад"
 
-    async def handle(self, message: Message):
+    async def handle(self, message: Message) -> State:
 
         if message.text == self.BACK:
             return TeacherMenu
 
-        text = message.text.split()
-        if len(text) == 2 and await self._is_student(text[0]):
-            self.state_info_repository.get(message.from_user.id).chosen_student = text[
-                0
-            ]
+        if await self._validate_message(message):
+            self.state_info_repository.get(message.from_user.id).chosen_student = self._get_id(message)
             return ChoseTask
         else:
             await message.answer(
@@ -41,14 +40,22 @@ class ChoseStudentStateController(Controller):
 
     async def prepare(self, message: Message):
         await message.answer(
-            self.CHOOSE_STUDENT, reply_markup=self._get_chose_student_keyboard()
+            self.CHOOSE_STUDENT, reply_markup=await self._get_chose_student_keyboard()
         )
 
-    def _get_chose_student_keyboard(self) -> ReplyKeyboardMarkup:
+    async def _validate_message(self, message: Message) -> bool:
+        text: List[str] = message.text.split()
+        return len(text) == 2 and await self._is_student(self._get_id(message))
+
+    @staticmethod
+    def _get_id(message: Message) -> str:
+        return message.text.split()[0]
+
+    async def _get_chose_student_keyboard(self) -> ReplyKeyboardMarkup:
         choose_student_keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
             resize_keyboard=True
         )
-        for student in self.user_repository.get_all_students():
+        for student in await self.user_repository.get_by_role("student"):
             choose_student_keyboard.add(KeyboardButton(f"{student} ▸"))
         choose_student_keyboard.add(KeyboardButton(self.BACK))
         return choose_student_keyboard

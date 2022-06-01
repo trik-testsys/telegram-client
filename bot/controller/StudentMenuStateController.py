@@ -6,6 +6,7 @@ from bot.repository.SubmitRepository import SubmitRepository
 from bot.repository.TaskRepository import TaskRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller, State
+from bot.view.SubmitView import SubmitView
 
 
 @controller(StudentMenu)
@@ -19,30 +20,31 @@ class StudentMenuController(Controller):
         task_repository: TaskRepository,
         submit_repository: SubmitRepository,
         state_info_repository: StateInfoRepository,
+        submit_view: SubmitView
     ):
         self.task_repository: TaskRepository = task_repository
         self.submit_repository: SubmitRepository = submit_repository
         self.state_info_repository: StateInfoRepository = state_info_repository
+        self.submit_view: SubmitView = submit_view
 
-    async def create_CHOOSE_TASK_KEYBOARD(self, student):
-        CHOOSE_TASK_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True)
-        results = await self.submit_repository.get_student_result(student)
+    async def create_choose_task_keyboard(self, student):
+        choose_task_keyboard = ReplyKeyboardMarkup(resize_keyboard=True)
+        results = await self.submit_view.get_student_result(student)
 
         for task_name in sorted(results.keys()):
-            result = results[task_name]
-            CHOOSE_TASK_KEYBOARD.add(
-                KeyboardButton(f" {task_name} | {self.new_result_view(result)} ▸")
+            choose_task_keyboard.add(
+                KeyboardButton(f" {task_name} | {results[task_name]} ▸")
             )
 
-        CHOOSE_TASK_KEYBOARD.add(KeyboardButton(self.UPDATE))
-        CHOOSE_TASK_KEYBOARD.add(KeyboardButton(self.HELP))
-        return CHOOSE_TASK_KEYBOARD
+        choose_task_keyboard.add(KeyboardButton(self.UPDATE))
+        choose_task_keyboard.add(KeyboardButton(self.HELP))
+        return choose_task_keyboard
 
     async def handle(self, message: types.Message) -> State:
         match message.text:
 
             case self.UPDATE:
-                keyboard = await self.create_CHOOSE_TASK_KEYBOARD(
+                keyboard = await self.create_choose_task_keyboard(
                     self.state_info_repository.get(message.from_user.id).user_id
                 )
                 await message.answer("Обновлено", reply_markup=keyboard)
@@ -69,20 +71,7 @@ class StudentMenuController(Controller):
                 return StudentMenu
 
     async def prepare(self, message: types.Message):
-        keyboard = await self.create_CHOOSE_TASK_KEYBOARD(
+        keyboard = await self.create_choose_task_keyboard(
             self.state_info_repository.get(message.from_user.id).user_id
         )
         await message.answer(self.CHOOSE_ACTION, reply_markup=keyboard)
-
-    def new_result_view(self, res: str) -> str:
-
-        match res[0]:
-
-            case "+":
-                return res.replace("+", "✅ | Попыток: ")
-            case "-":
-                return res.replace("-", "❌ | Попыток: ")
-            case "?":
-                return res.replace("?", "🔄 | Попыток: ")
-            case "0":
-                return res.replace("0", " Попыток: 0")
