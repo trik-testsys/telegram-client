@@ -10,10 +10,10 @@ from bot.teletrik.DI import controller
 @controller(ChoseSubmit)
 class ChoseSubmitStateController(Controller):
     def __init__(
-            self,
-            submit_repository: SubmitRepository,
-            state_info_repository: StateInfoRepository,
-            grading_service: GradingService,
+        self,
+        submit_repository: SubmitRepository,
+        state_info_repository: StateInfoRepository,
+        grading_service: GradingService,
     ):
         self.submit_repository: SubmitRepository = submit_repository
         self.state_info_repository: StateInfoRepository = state_info_repository
@@ -23,7 +23,9 @@ class ChoseSubmitStateController(Controller):
     CHOOSE_SUBMIT = "Попытки по задаче ▸"
     BACK = "◂ Назад"
     SUBMIT = "Посылка ученика"
-    SERVER_FAIL = "Не удалось получить посылку так как сервер недоступен. Попробуйте позже."
+    SERVER_FAIL = (
+        "Не удалось получить посылку так как сервер недоступен. Попробуйте позже."
+    )
     USE_KEYBOARD = "Я вас не понял, пожалуйста  воспользуйтесь кнопкой из клавиатуры"
 
     async def handle(self, message: Message):
@@ -56,7 +58,9 @@ class ChoseSubmitStateController(Controller):
         )
 
     async def _create_choose_submit_keyboard(self, message) -> ReplyKeyboardMarkup:
-        choose_submit_keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(resize_keyboard=True)
+        choose_submit_keyboard: ReplyKeyboardMarkup = ReplyKeyboardMarkup(
+            resize_keyboard=True
+        )
         state_info = self.state_info_repository.get(message.from_user.id)
         submits = await self.submit_repository.get_student_submits_by_task(
             state_info.chosen_student, state_info.chosen_task

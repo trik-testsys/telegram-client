@@ -30,7 +30,9 @@ class ChoseStudentStateController(Controller):
             return TeacherMenu
 
         if await self._validate_message(message):
-            self.state_info_repository.get(message.from_user.id).chosen_student = self._get_id(message)
+            self.state_info_repository.get(
+                message.from_user.id
+            ).chosen_student = self._get_id(message)
             return ChoseTask
         else:
             await message.answer(

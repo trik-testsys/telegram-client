@@ -20,7 +20,7 @@ class StudentMenuController(Controller):
         task_repository: TaskRepository,
         submit_repository: SubmitRepository,
         state_info_repository: StateInfoRepository,
-        submit_view: SubmitView
+        submit_view: SubmitView,
     ):
         self.task_repository: TaskRepository = task_repository
         self.submit_repository: SubmitRepository = submit_repository

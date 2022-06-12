@@ -18,7 +18,7 @@ class SubmitStateController(Controller):
 
     BACK = "◂ Назад"
     SEND_FILE = "Отправьте файл с решением или нажмите <<Назад>>"
-    SENT = "Решение отправлено"
+    SENT = "Бот принял вашу работу и начал её анализировать. Таблицу с результатами обработки можно посмотреть в меню 'Результаты запусков'"
     NOT_SENT = (
         "Решение не отправлено так как сервер проверки недоступен. Попробуйте позже"
     )
@@ -41,7 +41,7 @@ class SubmitStateController(Controller):
         )
 
         if submit_id != self.grading_service.ERROR:
-            await message.answer(f"{self.SENT}, ID попытки: {submit_id}")
+            await message.answer(f"{self.SENT}, ID решения: {submit_id}")
             return TaskMenu
         else:
             await message.answer(f"{self.NOT_SENT}")

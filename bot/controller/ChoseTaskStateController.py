@@ -11,11 +11,11 @@ from bot.view.SubmitView import SubmitView
 @controller(ChoseTask)
 class ChoseTaskStateController(Controller):
     def __init__(
-            self,
-            task_repository: TaskRepository,
-            submit_repository: SubmitRepository,
-            state_info_repository: StateInfoRepository,
-            submit_view: SubmitView
+        self,
+        task_repository: TaskRepository,
+        submit_repository: SubmitRepository,
+        state_info_repository: StateInfoRepository,
+        submit_view: SubmitView,
     ):
         self.task_repository: TaskRepository = task_repository
         self.submit_repository: SubmitRepository = submit_repository
@@ -34,9 +34,7 @@ class ChoseTaskStateController(Controller):
         )
         for task_name in student_result.keys():
             choose_task_keyboard.add(
-                KeyboardButton(
-                    f"{task_name} {student_result[task_name]} ▸"
-                )
+                KeyboardButton(f"{task_name} {student_result[task_name]} ▸")
             )
 
         choose_task_keyboard.add(KeyboardButton(self.BACK))

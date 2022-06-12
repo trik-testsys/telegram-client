@@ -22,9 +22,7 @@ class TeacherMenuStateController(Controller):
         KeyboardButton(CHOOSE_STUDENT),
     )
 
-    def __init__(self,
-                 submit_repository: SubmitRepository,
-                 submit_view: SubmitView):
+    def __init__(self, submit_repository: SubmitRepository, submit_view: SubmitView):
         self.submit_repository: SubmitRepository = submit_repository
         self.submit_view: SubmitView = submit_view
 
