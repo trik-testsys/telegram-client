@@ -38,49 +38,15 @@ class GradingService:
         return submit_id
 
     async def get_submissions_status(self, submit_id: str) -> str:
-        async with aiohttp.ClientSession() as session:
-
-            async with session.get(
-                f"{self.url}status", params={"id": submit_id}
-            ) as resp:
-
-                match resp.status:
-
-                    case 200:
-                        return await resp.text()
-
-                    case _:
-                        return self.ERROR
+        return await self._get_request(f"{self.url}status", params={"id": submit_id})
 
     async def get_submission(self, submit_id: str):
-        async with aiohttp.ClientSession() as session:
-
-            async with session.get(
-                f"{self.url}download", params={"id": submit_id}
-            ) as resp:
-
-                match resp.status:
-
-                    case 200:
-                        return await resp.read()
-
-                    case _:
-                        return self.ERROR
+        return await self._get_request(f"{self.url}download", params={"id": submit_id})
 
     async def get_lektorium_info(self, submit_id: str):
-        async with aiohttp.ClientSession() as session:
-
-            async with session.get(
-                f"{self.url}lectorium_info", params={"id": submit_id}
-            ) as resp:
-
-                match resp.status:
-
-                    case 200:
-                        return await resp.read()
-
-                    case _:
-                        return self.ERROR
+        return await self._get_request(
+            f"{self.url}lectorium_info", params={"id": submit_id}
+        )
 
     async def _send_task(self, task_name: str, file) -> str:
         params = {"task_name": task_name, "file": file}
@@ -100,4 +66,26 @@ class GradingService:
                             return self.ERROR
 
         except asyncio.exceptions.TimeoutError:
+            return self.ERROR
+        except aiohttp.client_exceptions.ClientConnectionError:
+            return self.ERROR
+
+    async def _get_request(self, url: str, params: dict[str, str]) -> str:
+        timeout = aiohttp.ClientTimeout(total=5)
+
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+
+                async with session.get(url, params=params) as resp:
+                    match resp.status:
+
+                        case 200:
+                            return await resp.text()
+
+                        case _:
+                            return self.ERROR
+
+        except asyncio.exceptions.TimeoutError:
+            return self.ERROR
+        except aiohttp.client_exceptions.ClientConnectionError:
             return self.ERROR

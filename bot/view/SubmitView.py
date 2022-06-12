@@ -8,11 +8,12 @@ from prettytable import PrettyTable
 
 @view
 class SubmitView:
-
-    def __init__(self,
-                 task_repository: TaskRepository,
-                 user_repository: UserRepository,
-                 submit_repository: SubmitRepository) -> None:
+    def __init__(
+        self,
+        task_repository: TaskRepository,
+        user_repository: UserRepository,
+        submit_repository: SubmitRepository,
+    ) -> None:
         self.task_repository: TaskRepository = task_repository
         self.user_repository: UserRepository = user_repository
         self.submit_repository: SubmitRepository = submit_repository
@@ -24,7 +25,9 @@ class SubmitView:
             results[task] = "undef"
 
         for task in sorted(self.task_repository.get_tasks()):
-            student_result = await self.submit_repository.get_student_submits_by_task(student_id, task)
+            student_result = await self.submit_repository.get_student_submits_by_task(
+                student_id, task
+            )
             status = ""
             cnt = str(len(student_result))
             hasv = False
@@ -49,12 +52,14 @@ class SubmitView:
         return results
 
     async def get_student_submits_view(
-            self, student_id: str, task_name: str
+        self, student_id: str, task_name: str
     ) -> PrettyTable:
-        results = await self.submit_repository.get_student_submits_by_task(student_id, task_name)
+        results = await self.submit_repository.get_student_submits_by_task(
+            student_id, task_name
+        )
         table = PrettyTable()
 
-        table.field_names = ["Id посылки", "Результат"]
+        table.field_names = ["Id решения", "Результат"]
         for result in results:
             table.add_row([result.submit_id, result.result])
 
@@ -178,7 +183,9 @@ class SubmitView:
     async def get_stat_view(self) -> str:
         stat = ""
         stat += f"Учеников: {len(await self.user_repository.get_all_students())} \n"
-        stat += f"Всего попыток: {len(await self.submit_repository.get_all_results())} \n"
+        stat += (
+            f"Всего попыток: {len(await self.submit_repository.get_all_results())} \n"
+        )
 
         for task_name in sorted(self.task_repository.get_tasks().keys()):
             stat += await self.get_task_stat_view(task_name)

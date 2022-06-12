@@ -31,9 +31,7 @@ class CommandController(Controller):
                 if user is None:
                     token: str = self.token_service.generate_new_token(tg_id)
                     await self.user_repository.create_user(token, "student", tg_id)
-                    self.state_info_repository.create(
-                        message.from_user.id, token
-                    )
+                    self.state_info_repository.create(message.from_user.id, token)
                 else:
                     self.state_info_repository.create(
                         message.from_user.id, user.user_id
