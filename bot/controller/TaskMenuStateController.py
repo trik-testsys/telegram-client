@@ -33,8 +33,11 @@ class TaskMenuStateController(Controller):
     DATA_FOR_LEKTORIUM = "Лучший результат"
     BACK = "◂ Назад"
     SENT = "Бот принял вашу работу и начал её анализировать. Таблицу с результатами обработки можно посмотреть в меню 'Результаты запусков'"
-    NOT_SENT = (
-        "Решение не отправлено так как сервер проверки недоступен. Попробуйте позже"
+    NOT_SENT_SERVER_ERROR = (
+        "Решение не отправлено так как сервер проверки недоступен или отправлен некорректный файл. Попробуйте позже"
+    )
+    NOT_SENT_USER_ERROR = (
+        "Решение не отправлено так как получен некорректный файл."
     )
     ERROR_NOT_FILE = "Пожалуйста, отправьте файл"
 
@@ -102,11 +105,13 @@ class TaskMenuStateController(Controller):
         submit_id = await self.grading_service.send_task(
             state_info.chosen_task, state_info.user_id, file
         )
-
-        if submit_id != self.grading_service.ERROR:
-            await message.answer(f"{self.SENT}, ID решения: {submit_id}")
-        else:
-            await message.answer(f"{self.NOT_SENT}")
+        match submit_id:
+            case self.grading_service.SERVER_ERROR:
+                await message.answer(f"{self.NOT_SENT_SERVER_ERROR}")
+            case self.grading_service.USER_ERROR:
+                await message.answer(f"{self.NOT_SENT_USER_ERROR}")
+            case _:
+                await message.answer(f"{self.SENT}, ID решения: {submit_id}")
         return True
 
     async def prepare(self, message: Message):

@@ -11,7 +11,8 @@ from bot.teletrik.DI import service
 class GradingService:
     def __init__(self, submit_repository: SubmitRepository):
         self.url: str = f"{GRADING_SERVICE_URL}grading-system/submissions/submission/"
-        self.ERROR: str = "error"
+        self.SERVER_ERROR: str = "error"
+        self.USER_ERROR: str = "user_error"
         self.submit_repository: SubmitRepository = submit_repository
 
     async def scheduled(self):
@@ -25,14 +26,14 @@ class GradingService:
             if submit.result == "?":
                 result = await self.get_submissions_status(submit.submit_id)
                 print(f"Result {submit.submit_id}: {result}")
-                submit.result = result if result != self.ERROR else submit.result
+                submit.result = result if result != self.SERVER_ERROR else submit.result
                 submit.save()
 
     async def send_task(self, task_name: str, student_id: str, file) -> str:
 
         submit_id = await self._send_task(task_name, file)
 
-        if submit_id != self.ERROR:
+        if submit_id != self.SERVER_ERROR:
             await self.submit_repository.create_submit(submit_id, student_id, task_name)
 
         return submit_id
@@ -62,13 +63,16 @@ class GradingService:
                         case 200:
                             return await resp.text()
 
+                        case 422:
+                            return self.USER_ERROR
+
                         case _:
-                            return self.ERROR
+                            return self.SERVER_ERROR
 
         except asyncio.exceptions.TimeoutError:
-            return self.ERROR
+            return self.SERVER_ERROR
         except aiohttp.client_exceptions.ClientConnectionError:
-            return self.ERROR
+            return self.SERVER_ERROR
 
     async def _get_request(self, url: str, params: dict[str, str]) -> str:
         timeout = aiohttp.ClientTimeout(total=5)
@@ -83,9 +87,9 @@ class GradingService:
                             return await resp.text()
 
                         case _:
-                            return self.ERROR
+                            return self.SERVER_ERROR
 
         except asyncio.exceptions.TimeoutError:
-            return self.ERROR
+            return self.SERVER_ERROR
         except aiohttp.client_exceptions.ClientConnectionError:
-            return self.ERROR
+            return self.SERVER_ERROR
