@@ -78,10 +78,11 @@ class TaskMenuStateController(Controller):
                         )
                     case _:
                         await message.answer(
-                            "Система выбрала лучший удачный результат из отправленных вами. Чтобы засчитать этот результат скопируйте данные ниже в форму на Лекториуме:"
+                            "Система выбрала лучший удачный результат из отправленных вами. Чтобы засчитать этот "
+                            "результат, скопируйте данные ниже в форму на Лекториуме: "
                         )
                         await message.answer(f"Пин-код: {result['pin']}")
-                        await message.answer(f"Проверочный код {result['hash']}")
+                        await message.answer(f"Проверочный код: {result['hash']}")
                 return TaskMenu
 
             case _:
