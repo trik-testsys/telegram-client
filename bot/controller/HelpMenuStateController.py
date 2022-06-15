@@ -31,11 +31,11 @@ class HelpMenuStateController(Controller):
 
     HELP_MENU_KEYBOARD = ReplyKeyboardMarkup()
     HELP_MENU_KEYBOARD.add(
+        KeyboardButton(HOW_TO_CHECK_TASK),
+        KeyboardButton(HOW_TO_UNDERSTAND_RESULTS),
         KeyboardButton(MAIN_MENU),
         KeyboardButton(AUTH),
         KeyboardButton(REMEMBER),
-        KeyboardButton(HOW_TO_CHECK_TASK),
-        KeyboardButton(HOW_TO_UNDERSTAND_RESULTS),
     )
 
     async def handle(self, message: types.Message):
