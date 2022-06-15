@@ -28,7 +28,7 @@ class LektoriumService:
         if submit_id is None:
             return self.NO_POSITIVE_SUBMIT
         result = await self.grading_service.get_lektorium_info(submit_id)
-        if result == self.grading_service.ERROR:
+        if result == self.grading_service.SERVER_ERROR:
             return self.GRADING_ERROR
         return json.loads(result)
 

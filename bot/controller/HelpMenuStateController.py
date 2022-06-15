@@ -31,11 +31,11 @@ class HelpMenuStateController(Controller):
 
     HELP_MENU_KEYBOARD = ReplyKeyboardMarkup()
     HELP_MENU_KEYBOARD.add(
+        KeyboardButton(HOW_TO_CHECK_TASK),
+        KeyboardButton(HOW_TO_UNDERSTAND_RESULTS),
         KeyboardButton(MAIN_MENU),
         KeyboardButton(AUTH),
         KeyboardButton(REMEMBER),
-        KeyboardButton(HOW_TO_CHECK_TASK),
-        KeyboardButton(HOW_TO_UNDERSTAND_RESULTS),
     )
 
     async def handle(self, message: types.Message):
@@ -77,10 +77,9 @@ class HelpMenuStateController(Controller):
                 await message.answer(
                     """*Как устроена проверка задач*
 1. Выберите задачу в меню
-2. Нажмите на Отправить ▸.
-3. Прикрепите файл с решением и отправьте его. Бот начнёт обработку. Обычно это занимает не более 10 минут.
-4. Таблицу с результатами обработки можно посмотреть в меню "Результаты запусков"
-5. Если запуск был удачный, то в меню "Лучший результат" вы получите пин-код и хеш, которые надо использовать на курсе.""",
+2. Прикрепите файл с решением и отправьте его. Бот начнёт обработку. Обычно это занимает не более 10 минут.
+3. Таблицу с результатами обработки можно посмотреть в меню "Результаты запусков"
+4. Если запуск был удачный, то в меню "Лучший результат" вы получите пин-код и хеш, которые надо использовать на курсе.""",
                     parse_mode=ParseMode.MARKDOWN,
                 )
                 return HelpMenu

@@ -4,7 +4,6 @@ from . import ChoseTaskStateController
 from . import CommandController
 from . import HelpMenuStateController
 from . import StudentMenuStateController
-from . import SubmitStateController
 from . import TaskMenuStateController
 from . import TeacherMenuStateController
 from . import WaitAuthStateController
