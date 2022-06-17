@@ -45,5 +45,3 @@ class TaskRepository:
 
     def get_tasks_names(self) -> list[str]:
         return [task.name for task in self.tasks.values()]
-
-
