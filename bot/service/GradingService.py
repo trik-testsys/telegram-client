@@ -25,15 +25,14 @@ class GradingService:
 
             if submit.result == "?":
                 result = await self.get_submissions_status(submit.submit_id)
-                print(f"Result {submit.submit_id}: {result}")
-                submit.result = result if result != self.SERVER_ERROR else submit.result
+                submit.result = result if result != self.SERVER_ERROR and result != self.USER_ERROR else submit.result
                 submit.save()
 
     async def send_task(self, task_name: str, student_id: str, file) -> str:
 
         submit_id = await self._send_task(task_name, file)
 
-        if submit_id != self.SERVER_ERROR:
+        if submit_id != self.SERVER_ERROR and submit_id != self.USER_ERROR:
             await self.submit_repository.create_submit(submit_id, student_id, task_name)
 
         return submit_id

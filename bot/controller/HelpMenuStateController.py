@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.types import KeyboardButton, ParseMode, ReplyKeyboardMarkup
-from bot.controller.States import HelpMenu, StudentMenu, WaitAuth
+from bot.controller.States import Cabinet, HelpMenu, StudentMenu
 from bot.model.User import User
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.UserRepository import UserRepository
@@ -22,10 +22,9 @@ class HelpMenuStateController(Controller):
         self.state_info_repository: StateInfoRepository = state_info_repository
 
     MAIN_MENU = "◂ Главное меню"
-    AUTH = "Сменить кабинет ▸"
-    REMEMBER = "Напомнить токен"
     HOW_TO_CHECK_TASK = "ℹ Как устроена проверка задач?"
     HOW_TO_UNDERSTAND_RESULTS = "ℹ️ Что означают + - ? ✅ ❌ 🔄"
+    HOW_TO_CABINET = "Настройки кабинета"
 
     CHOOSE_ACTION = "Выберите действие, нажав нужную кнопку"
 
@@ -34,16 +33,12 @@ class HelpMenuStateController(Controller):
         KeyboardButton(HOW_TO_CHECK_TASK),
         KeyboardButton(HOW_TO_UNDERSTAND_RESULTS),
         KeyboardButton(MAIN_MENU),
-        KeyboardButton(AUTH),
-        KeyboardButton(REMEMBER),
+        KeyboardButton(HOW_TO_CABINET)
     )
 
     async def handle(self, message: types.Message):
 
         match message.text:
-
-            case self.AUTH:
-                return WaitAuth
 
             case self.MAIN_MENU:
                 tg_id: str = message.from_user.id
@@ -60,18 +55,8 @@ class HelpMenuStateController(Controller):
                     )
                     return StudentMenu
 
-            case self.REMEMBER:
-                tg_id: str = message.from_user.id
-                user: User | None = await self.user_repository.get_by_telegram_id(tg_id)
-
-                if user is None:
-                    await message.answer(
-                        "Вы ещё не зарегестрированы, для регистрации отправьте /start"
-                    )
-                else:
-                    await message.answer("Ваш токен:")
-                    await message.answer(user.user_id)
-                return HelpMenu
+            case self.HOW_TO_CABINET:
+                return Cabinet
 
             case self.HOW_TO_CHECK_TASK:
                 await message.answer(
