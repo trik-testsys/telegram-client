@@ -54,16 +54,17 @@ class StudentMenuController(Controller):
                 return HelpMenu
 
             case _:
-                info = message.text.split()
+                info = message.text.split(":")
                 if len(info) < 2:
                     await message.answer(
                         "Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры"
                     )
                     return StudentMenu
-                if info[0] in self.task_repository.get_tasks():
+                task_id = info[0]
+                if self.task_repository.task_exists(task_id):
                     self.state_info_repository.get(
                         message.from_user.id
-                    ).chosen_task = info[0]
+                    ).chosen_task = task_id
                     return TaskMenu
                 await message.answer(
                     "Я вас не понял, пожалуйста воспользуйтесь кнопкой из клавиатуры"

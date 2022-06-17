@@ -61,11 +61,11 @@ class ChoseTaskStateController(Controller):
         )
 
     def _validate_message(self, message: Message) -> bool:
-        text: list[str] = message.text.split()
+        text: list[str] = message.text.split(":")
         if len(text) < 2:
             return False
-        task_name: str = text[0]
-        return task_name not in self.task_repository.get_tasks()
+        task_id: str = text[0]
+        return self.task_repository.task_exists(task_id)
 
     @staticmethod
     def _get_task_name(message: Message) -> str:
