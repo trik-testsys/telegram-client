@@ -1,3 +1,4 @@
+from . import CabinetController
 from . import ChoseStudentStateController
 from . import ChoseSubmitStateController
 from . import ChoseTaskStateController

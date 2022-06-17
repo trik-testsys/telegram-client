@@ -34,7 +34,7 @@ class WaitAuthStateController(Controller):
 
         if user is None:
             await message.answer(
-                self.INCORRECT_CODE, reply_markup=types.ReplyKeyboardRemove()
+                self.INCORRECT_CODE
             )
             return WaitAuth
 
