@@ -26,7 +26,7 @@ class SubmitView:
 
         for task in sorted(self.task_repository.get_tasks_names()):
             student_result = await self.submit_repository.get_student_submits_by_task(
-                student_id, task
+                student_id, task.split(":")[0]
             )
             status = ""
             cnt = str(len(student_result))
