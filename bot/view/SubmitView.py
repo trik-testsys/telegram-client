@@ -21,10 +21,10 @@ class SubmitView:
     async def get_student_result(self, student_id: str) -> dict[str, str]:
         results = {}
 
-        for task in sorted(self.task_repository.get_tasks()):
+        for task in sorted(self.task_repository.get_tasks_names()):
             results[task] = "undef"
 
-        for task in sorted(self.task_repository.get_tasks()):
+        for task in sorted(self.task_repository.get_tasks_names()):
             student_result = await self.submit_repository.get_student_submits_by_task(
                 student_id, task
             )
@@ -131,7 +131,7 @@ class SubmitView:
 
         table += "<thead><tr> "
         table += "<th>Ученики</th>"
-        for task_name in sorted(self.task_repository.get_tasks().keys()):
+        for task_name in sorted(self.task_repository.get_tasks_names()):
             table += f"<th>{task_name}</th>"
         table += "</tr></thead>"
 
@@ -187,7 +187,7 @@ class SubmitView:
             f"Всего попыток: {len(await self.submit_repository.get_all_results())} \n"
         )
 
-        for task_name in sorted(self.task_repository.get_tasks().keys()):
+        for task_name in sorted(self.task_repository.get_tasks_names()):
             stat += await self.get_task_stat_view(task_name)
 
         return stat

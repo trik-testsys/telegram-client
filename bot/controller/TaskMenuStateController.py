@@ -136,8 +136,6 @@ class TaskMenuStateController(Controller):
         return task_menu_keyboard
 
     async def _get_description(self, message: Message) -> str:
-        task_name = self.state_info_repository.get(message.from_user.id).chosen_task
-        tasks = self.task_repository.get_tasks()
-        for task in tasks.keys():
-            if task == task_name:
-                return f"Задача: {task}\nОписание: {tasks[task]}"
+        task_id = self.state_info_repository.get(message.from_user.id).chosen_task
+        task = self.task_repository.get_task(task_id)
+        return f"Задача: {task.name}\nОписание: {task.statement}"
