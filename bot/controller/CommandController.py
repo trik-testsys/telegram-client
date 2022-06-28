@@ -1,5 +1,5 @@
 from aiogram.types import Message
-from bot.controller.States import HelpMenu, StudentMenu
+from bot.controller.States import HelpMenu, StudentMenu, TeacherMenu
 from bot.model.User import User
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.UserRepository import UserRepository
@@ -36,6 +36,7 @@ class CommandController(Controller):
                     self.state_info_repository.create(
                         message.from_user.id, user.user_id
                     )
+
                 return StudentMenu
 
             case "/help":

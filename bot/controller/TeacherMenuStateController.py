@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-from bot.controller.States import ChoseStudent, TeacherMenu
+from bot.controller.States import ChoseStudent, TeacherMenu, ChangeResult, SendMessage, StudentMenu
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
@@ -9,17 +9,22 @@ from bot.view.SubmitView import SubmitView
 
 @controller(TeacherMenu)
 class TeacherMenuStateController(Controller):
-    RESULTS = "Сводная статистика"
-    FULL_RESULTS = "Полная статистика"
-    CHOOSE_STUDENT = "Ученики ▸"
+    # RESULTS = "Сводная статистика"
+    # FULL_RESULTS = "Полная статистика"
+    # CHOOSE_STUDENT = "Ученики ▸"
     UNKNOWN_COMMAND = "Неизвестная команда"
     BACK = "◂ Назад"
     CHOOSE_ACTION = "Выберите действие"
+    CHANGE_RESULT = "Изменить результат ▸"
+    SEND_MESSAGE = "Отправить сообщение ▸"
 
     TEACHER_MENU_KEYBOARD = ReplyKeyboardMarkup(resize_keyboard=True).add(
-        KeyboardButton(RESULTS),
-        KeyboardButton(FULL_RESULTS),
-        KeyboardButton(CHOOSE_STUDENT),
+        # KeyboardButton(RESULTS),
+        # KeyboardButton(FULL_RESULTS),
+        # KeyboardButton(CHOOSE_STUDENT),
+        KeyboardButton(CHANGE_RESULT),
+        KeyboardButton(SEND_MESSAGE),
+        KeyboardButton(BACK)
     )
 
     def __init__(self, submit_repository: SubmitRepository, submit_view: SubmitView):
@@ -29,23 +34,32 @@ class TeacherMenuStateController(Controller):
     async def handle(self, message: types.Message):
         match message.text:
 
-            case self.RESULTS:
-                results = await self.submit_view.get_stat_view()
-                await message.answer(results, reply_markup=self.TEACHER_MENU_KEYBOARD)
-                return TeacherMenu
+            # case self.RESULTS:
+            #     results = await self.submit_view.get_stat_view()
+            #     await message.answer(results, reply_markup=self.TEACHER_MENU_KEYBOARD)
+            #     return TeacherMenu
+            #
+            # case self.FULL_RESULTS:
+            #     results = await self.submit_view.get_all_results_view()
+            #     await message.bot.send_document(
+            #         message.from_user.id, ("results.html", results)
+            #     )
+            #     await message.answer(
+            #         "Результаты", reply_markup=self.TEACHER_MENU_KEYBOARD
+            #     )
+            #     return TeacherMenu
+            #
+            # case self.CHOOSE_STUDENT:
+            #     return ChoseStudent
 
-            case self.FULL_RESULTS:
-                results = await self.submit_view.get_all_results_view()
-                await message.bot.send_document(
-                    message.from_user.id, ("results.html", results)
-                )
-                await message.answer(
-                    "Результаты", reply_markup=self.TEACHER_MENU_KEYBOARD
-                )
-                return TeacherMenu
+            case self.CHANGE_RESULT:
+                return ChangeResult
 
-            case self.CHOOSE_STUDENT:
-                return ChoseStudent
+            case self.SEND_MESSAGE:
+                return SendMessage
+            
+            case self.BACK:
+                return StudentMenu
 
             case _:
                 await message.answer(
