@@ -10,10 +10,6 @@ class UserRepository:
         User.create_table()
 
     @staticmethod
-    async def get_all_students() -> List[User]:
-        return User.select().where(User.role == "student")
-
-    @staticmethod
     async def get_by_role(role: str) -> List[User]:
         return User.select().where(User.role == role)
 
