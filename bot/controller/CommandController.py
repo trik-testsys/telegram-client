@@ -27,7 +27,6 @@ class CommandController(Controller):
             case "/start":
                 tg_id: str = message.from_user.id
                 user: User | None = await self.user_repository.get_by_telegram_id(tg_id)
-
                 if user is None:
                     token: str = self.token_service.generate_new_token(tg_id)
                     await self.user_repository.create_user(token, "student", tg_id)
@@ -42,5 +41,9 @@ class CommandController(Controller):
             case "/help":
                 return HelpMenu
 
+            case _:
+                await message.answer("Неизвестная команда, доступные команды: /start, /help")
+                return Command
+
     async def prepare(self, message: Message):
-        pass
+        return

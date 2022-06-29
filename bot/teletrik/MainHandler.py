@@ -13,10 +13,17 @@ class MainHandler:
         idr: int = message.from_user.id
         cur_state: State = self._states.get(idr)
 
-        (command_handler, _, _) = self._find_command_handler()
-        result: State = await command_handler(message)
+        if cur_state is None:
+            cur_state = "command"
 
-        if result is None:
+        if cur_state == "command":
+            (command_handler, _, _) = self._find_command_handler()
+            result: State = await command_handler(message)
+            self._states[idr] = result
+            (_, prepare, _) = self._chose_handler(idr)
+            await prepare(message)
+
+        else:
             (handler, _, _) = self._chose_handler(idr)
             new_state: str = await handler(message)
             self._states[idr] = new_state
@@ -24,13 +31,10 @@ class MainHandler:
             if cur_state != new_state:
                 (_, prepare, _) = self._chose_handler(idr)
                 await prepare(message)
-        else:
-            self._states[idr] = result
-            (_, prepare, _) = self._chose_handler(idr)
-            await prepare(message)
 
     def _chose_handler(self, idr: int) -> Handler:
         cur_state = self._states.get(idr)
+        print(self._states)
         for (handler, prep, state) in self._handlers:
             if cur_state == state:
                 return handler, prep, state
