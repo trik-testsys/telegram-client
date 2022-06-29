@@ -1,5 +1,5 @@
 from aiogram.types import Message
-from bot.controller.States import HelpMenu, StudentMenu
+from bot.controller.States import HelpMenu, StudentMenu, TeacherMenu
 from bot.model.User import User
 from bot.repository.StateInfoRepository import StateInfoRepository
 from bot.repository.UserRepository import UserRepository
@@ -27,7 +27,6 @@ class CommandController(Controller):
             case "/start":
                 tg_id: str = message.from_user.id
                 user: User | None = await self.user_repository.get_by_telegram_id(tg_id)
-
                 if user is None:
                     token: str = self.token_service.generate_new_token(tg_id)
                     await self.user_repository.create_user(token, "student", tg_id)
@@ -36,10 +35,15 @@ class CommandController(Controller):
                     self.state_info_repository.create(
                         message.from_user.id, user.user_id
                     )
+
                 return StudentMenu
 
             case "/help":
                 return HelpMenu
 
+            case _:
+                await message.answer("Неизвестная команда, доступные команды: /start, /help")
+                return Command
+
     async def prepare(self, message: Message):
-        pass
+        return

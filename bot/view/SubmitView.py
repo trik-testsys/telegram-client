@@ -136,7 +136,7 @@ class SubmitView:
         table += "</tr></thead>"
 
         cnt = 0
-        for student in await self.user_repository.get_all_students():
+        for student in await self.user_repository.get_by_role("student"):
             table += f"<tr class=\"{'even' if cnt % 2 == 0 else 'odd'}\">"
             table += f"<td>{student}</td>"
             student_result = await self.get_student_result(student)
@@ -182,7 +182,7 @@ class SubmitView:
 
     async def get_stat_view(self) -> str:
         stat = ""
-        stat += f"Учеников: {len(await self.user_repository.get_all_students())} \n"
+        stat += f"Учеников: {len(await self.user_repository.get_by_role('student'))} \n"
         stat += (
             f"Всего попыток: {len(await self.submit_repository.get_all_results())} \n"
         )
