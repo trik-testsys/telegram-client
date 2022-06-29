@@ -27,8 +27,10 @@ class SendMessageStateController(Controller):
                 return TeacherMenu
 
             case _:
-                for user in await self.user_repository.get_all_students():
-                    await message.bot.send_message(chat_id=user.telegram_id, text=f"Информация:\n{message.text}")
+                for user in await self.user_repository.get_by_role("student"):
+                    await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
+                for user in await self.user_repository.get_by_role("teacher"):
+                    await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
                 await message.answer("Сообщение успешно отправлено! "
                                      "Отправьте еще одно сообщение, или нажмите '◂ Назад'")
                 return SendMessage

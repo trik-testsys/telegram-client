@@ -1,14 +1,16 @@
 from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from bot.controller.States import ChangeResult, TeacherMenu
 from bot.repository.SubmitRepository import SubmitRepository
+from bot.repository.UserRepository import UserRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
 
 
 @controller(ChangeResult)
 class ChoseTaskStateController(Controller):
-    def __init__(self, submit_repository: SubmitRepository):
+    def __init__(self, submit_repository: SubmitRepository, user_repository: UserRepository):
         self.submit_repository: SubmitRepository = submit_repository
+        self.user_repository: UserRepository = user_repository
 
     BACK = "◂ Назад"
     INFO = "Отправьте id решения и новый вердикт\n" \
@@ -27,6 +29,12 @@ class ChoseTaskStateController(Controller):
         (submit_id, result) = self._parse_message(message)
 
         await self.submit_repository.update_submit_result(submit_id, result)
+        for teacher in await self.user_repository.get_by_role("teacher"):
+            await message.bot.send_message(
+                chat_id=teacher.telegram_id,
+                text=f"Результат проверки {submit_id} изменен на '{result}' "
+                     f"преподавателем {message.from_user.full_name}, id: {message.from_user.id}"
+            )
         await message.answer("Вердикт обновлен")
         return ChangeResult
 
