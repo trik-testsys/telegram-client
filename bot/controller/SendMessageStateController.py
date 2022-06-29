@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-from bot.controller.States import TeacherMenu, SendMessage
+from bot.controller.States import SendMessage, TeacherMenu
 from bot.repository.UserRepository import UserRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller

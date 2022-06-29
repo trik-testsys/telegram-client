@@ -1,6 +1,6 @@
 from aiogram import types
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-from bot.controller.States import ChoseStudent, TeacherMenu, ChangeResult, SendMessage, StudentMenu
+from bot.controller.States import ChangeResult, SendMessage, StudentMenu, TeacherMenu
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
@@ -57,7 +57,7 @@ class TeacherMenuStateController(Controller):
 
             case self.SEND_MESSAGE:
                 return SendMessage
-            
+
             case self.BACK:
                 return StudentMenu
 
