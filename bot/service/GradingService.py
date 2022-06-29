@@ -52,7 +52,7 @@ class GradingService:
         )
 
     async def _send_task(self, task_name: str, file) -> str:
-        return await self._post_request(url=f"{self.url}upload",params={"task_name": task_name, "file": file})
+        return await self._post_request(url=f"{self.url}upload", params={"task_name": task_name, "file": file})
 
     async def _get_request(self, url: str, params: dict[str, str]) -> str:
         timeout = aiohttp.ClientTimeout(total=5)
