@@ -2,15 +2,20 @@ from aiogram.types import KeyboardButton, Message, ReplyKeyboardMarkup
 from bot.controller.States import ChangeResult, TeacherMenu
 from bot.repository.SubmitRepository import SubmitRepository
 from bot.repository.UserRepository import UserRepository
+from bot.service.GradingService import GradingService
 from bot.teletrik.Controller import Controller
 from bot.teletrik.DI import controller
 
 
 @controller(ChangeResult)
 class ChoseTaskStateController(Controller):
-    def __init__(self, submit_repository: SubmitRepository, user_repository: UserRepository):
+    def __init__(self,
+                 submit_repository: SubmitRepository,
+                 user_repository: UserRepository,
+                 grading_service: GradingService):
         self.submit_repository: SubmitRepository = submit_repository
         self.user_repository: UserRepository = user_repository
+        self.grading_service: GradingService = grading_service
 
     BACK = "◂ Назад"
     INFO = "Отправьте id решения и новый вердикт\n" \
@@ -27,7 +32,10 @@ class ChoseTaskStateController(Controller):
             return ChangeResult
 
         (submit_id, result) = self._parse_message(message)
-
+        request_result = await self.grading_service.set_submission_status(submit_id, result)
+        if request_result != f"Changed {submit_id} status to {result}.":
+            await message.answer("Ошибка при обновлении вердикта, попробуйте позже")
+            return ChangeResult
         await self.submit_repository.update_submit_result(submit_id, result)
         for teacher in await self.user_repository.get_by_role("teacher"):
             await message.bot.send_message(

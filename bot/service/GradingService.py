@@ -37,6 +37,9 @@ class GradingService:
 
         return submit_id
 
+    async def set_submission_status(self, submit_id: str, status: str):
+        return await self._post_request(f"{self.url}status", params={"id": submit_id, "status": status})
+
     async def get_submissions_status(self, submit_id: str) -> str:
         return await self._get_request(f"{self.url}status", params={"id": submit_id})
 
@@ -49,29 +52,7 @@ class GradingService:
         )
 
     async def _send_task(self, task_name: str, file) -> str:
-        params = {"task_name": task_name, "file": file}
-        timeout = aiohttp.ClientTimeout(total=5)
-
-        try:
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-
-                async with session.post(f"{self.url}upload", data=params) as resp:
-                    logging.info(f"STATUS = {resp.status}")
-                    match resp.status:
-
-                        case 200:
-                            return await resp.text()
-
-                        case 422:
-                            return self.USER_ERROR
-
-                        case _:
-                            return self.SERVER_ERROR
-
-        except asyncio.exceptions.TimeoutError:
-            return self.SERVER_ERROR
-        except aiohttp.client_exceptions.ClientConnectionError:
-            return self.SERVER_ERROR
+        return await self._post_request(url=f"{self.url}upload",params={"task_name": task_name, "file": file})
 
     async def _get_request(self, url: str, params: dict[str, str]) -> str:
         timeout = aiohttp.ClientTimeout(total=5)
@@ -84,6 +65,29 @@ class GradingService:
 
                         case 200:
                             return await resp.text()
+
+                        case _:
+                            return self.SERVER_ERROR
+
+        except asyncio.exceptions.TimeoutError:
+            return self.SERVER_ERROR
+        except aiohttp.client_exceptions.ClientConnectionError:
+            return self.SERVER_ERROR
+
+    async def _post_request(self, url: str, params: dict[str, str]) -> str:
+        timeout = aiohttp.ClientTimeout(total=5)
+
+        try:
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+
+                async with session.post(url, data=params) as resp:
+                    match resp.status:
+
+                        case 200:
+                            return await resp.text()
+
+                        case 422:
+                            return self.USER_ERROR
 
                         case _:
                             return self.SERVER_ERROR
