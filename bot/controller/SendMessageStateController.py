@@ -28,9 +28,15 @@ class SendMessageStateController(Controller):
 
             case _:
                 for user in await self.user_repository.get_by_role("student"):
-                    await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
+                    try:
+                        await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
+                    except Exception:
+                        pass
                 for user in await self.user_repository.get_by_role("teacher"):
-                    await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
+                    try:
+                        await message.bot.send_message(chat_id=user.telegram_id, text=f"Оповещение:\n{message.text}")
+                    except Exception:
+                        pass
                 await message.answer("Сообщение успешно отправлено! "
                                      "Отправьте еще одно сообщение, или нажмите '◂ Назад'")
                 return SendMessage
