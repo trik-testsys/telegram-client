@@ -8,6 +8,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from bot.conf import PATH_TO_LOGS
 from bot.teletrik.DI import get_handlers, get_jobs, Handler
 from bot.teletrik.MainHandler import MainHandler
+from bot.utils import alert_admins
 
 
 class Client:
@@ -26,6 +27,7 @@ class Client:
         executor.start_polling(self._dp, skip_updates=True)
 
     def _add_scheduler_jobs(self):
+        self._scheduler.add_job(alert_admins, args=[self._bot])
         for job in get_jobs():
             self._scheduler.add_job(job, "interval", seconds=30)
 
