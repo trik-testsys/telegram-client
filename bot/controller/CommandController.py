@@ -42,8 +42,7 @@ class CommandController(Controller):
                 return HelpMenu
 
             case _:
-                await message.answer("Неизвестная команда, доступные команды: /start, /help")
-                return Command
+                return None
 
     async def prepare(self, message: Message):
         return

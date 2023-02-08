@@ -16,9 +16,10 @@ class MainHandler:
         if cur_state is None:
             cur_state = "command"
 
-        if cur_state == "command":
-            (command_handler, _, _) = self._find_command_handler()
-            result: State = await command_handler(message)
+        (command_handler, _, _) = self._find_command_handler()
+        result: State | None = await command_handler(message)
+
+        if result is not None:
             self._states[idr] = result
             (_, prepare, _) = self._chose_handler(idr)
             await prepare(message)
