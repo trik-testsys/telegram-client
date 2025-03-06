@@ -1,7 +1,7 @@
-[![CodeFactor](https://www.codefactor.io/repository/github/trik-testsys/trik-testsys-telegram-client/badge)](https://www.codefactor.io/repository/github/trik-testsys/trik-testsys-telegram-client)
-<a href="https://github.com/trik-testsys/trik-testsys-telegram-client/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+[![CodeFactor](https://www.codefactor.io/repository/github/trik-testsys/telegram-client/badge)](https://www.codefactor.io/repository/github/trik-testsys/trik-testsys-telegram-client)
+<a href="https://github.com/trik-testsys/telegram-client/"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 [![license](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-<a href="https://github.com/trik-testsys/trik-testsys-telegram-client/actions"><img alt="Actions Status" src="https://github.com/trik-testsys/trik-testsys-telegram-client/actions/workflows/lint.yml/badge.svg"></a>
+<a href="https://github.com/trik-testsys/telegram-client/actions"><img alt="Actions Status" src="https://github.com/trik-testsys/trik-testsys-telegram-client/actions/workflows/lint.yml/badge.svg"></a>
 # Grading system client for TRIK studio
 
 ## Overview
